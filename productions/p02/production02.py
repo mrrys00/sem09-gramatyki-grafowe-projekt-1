@@ -1,7 +1,10 @@
 from ..interface import Production
 
 class ProductionP2(Production):
-    """Production P2: Similar to P1 but with a hanging node on one edge."""
+    """
+    Production P2:
+    Similar to P1 but with a hanging node on one edge
+    """
 
     def check(self):
         """Check if the production can be applied when a hanging node exists on one edge."""

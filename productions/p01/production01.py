@@ -1,7 +1,10 @@
 from ..interface import Production
 
 class ProductionP1(Production):
-    """Production P1: Divides a quadrilateral into 4 smaller quadrilaterals."""
+    """
+    Production P1:
+    Divides a quadrilateral into 4 smaller quadrilaterals
+    """
 
     def check(self):
         """Check if the production can be applied on the selected quadrilateral."""
@@ -27,8 +30,9 @@ class ProductionP1(Production):
                 n2 = neighbors[(i + 1) % len(neighbors)]
                 midpoint = f"M{n1}{n2}"
                 if midpoint not in midpoints:
-                    self.graph.add_node(midpoint, label="v", x=(self.graph.nodes[n1]["x"] + self.graph.nodes[n2]["x"]) / 2,
-                                        y=(self.graph.nodes[n1]["y"] + self.graph.nodes[n2]["y"]) / 2, h=0)
+                    self.graph.add_node(
+                        midpoint, label="v", x=(self.graph.nodes[n1]["x"] + self.graph.nodes[n2]["x"]) / 2,
+                        y=(self.graph.nodes[n1]["y"] + self.graph.nodes[n2]["y"]) / 2, h=0)
                     midpoints[midpoint] = (n1, n2)
 
             # Add new quadrilateral elements

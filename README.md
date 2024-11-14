@@ -3,3 +3,7 @@
 ## Struktura projektu jeszcze nie gotowa!
 
 Nie twórzcie jeszcze branchy! Czekajcie na info!
+
+## How to
+
+    - w Makefile jest wszystko
