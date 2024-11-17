@@ -10,7 +10,7 @@ class Production(ABC):
         self.graph = graph
         self.subgraph = None
 
-    @abstractmethod
+    @property
     def check(self):
         """Check if the production can be applied."""
         pass

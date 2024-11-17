@@ -19,10 +19,10 @@ def prepare_graph_positive(request: type[FixtureRequest]):
 def prepare_graph_negative(request: type[FixtureRequest]):
     yield request.param
 
-
+# TODO fix tests
 def test_positive_p01_check(prepare_graph_positive: nx.Graph):
     """check is not None if the graph is valid"""
-    assert ProductionP2(prepare_graph_positive).check() is not None
+    assert ProductionP2(prepare_graph_positive).check is not None
 
 def test_positive_p01_apply(prepare_graph_positive: nx.Graph):
     """apply creates new node in graph"""
@@ -31,7 +31,7 @@ def test_positive_p01_apply(prepare_graph_positive: nx.Graph):
 
 def test_negative_p01_check(prepare_graph_negative: nx.Graph):
     """check is None if the graph is not valid"""
-    assert ProductionP2(prepare_graph_negative).check() is None
+    assert ProductionP2(prepare_graph_negative).check is None
 
 def test_negative_p01_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""

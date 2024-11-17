@@ -9,6 +9,7 @@ class ProductionP1(Production):
     Divides a quadrilateral into 4 smaller quadrilaterals
     """
 
+    @property
     def check(self):
         """Check if the production can be applied on the selected quadrilateral."""
         # Find nodes with R=1 (element marked for splitting) and h=0 for all vertices
@@ -27,7 +28,7 @@ class ProductionP1(Production):
 
     def apply(self):
         """Apply P1 to divide the quadrilateral."""
-        result = self.check()
+        result = self.check
         if result:
             q_node, neighbors = result
             # Remove the original node and its edges
