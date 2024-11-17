@@ -1,5 +1,7 @@
 from ..production import Production
 
+from statistics import fmean
+
 class ProductionP1(Production):
     """
     Production P1:
@@ -28,16 +30,42 @@ class ProductionP1(Production):
             midpoints = {}
             for i, n1 in enumerate(neighbors):
                 n2 = neighbors[(i + 1) % len(neighbors)]
-                midpoint = f'M{n1}{n2}'
+                x = (self.graph.nodes[n1]['x'] + self.graph.nodes[n2]['x']) / 2
+                y = (self.graph.nodes[n1]['y'] + self.graph.nodes[n2]['y']) / 2
+                midpoint = f'v:{x}:{y}'
+                old_edge_b = self.graph.get_edge_data(n1, n2)['B']
                 if midpoint not in midpoints:
                     self.graph.add_node(
-                        midpoint, label='v', x=(self.graph.nodes[n1]['x'] + self.graph.nodes[n2]['x']) / 2,
-                        y=(self.graph.nodes[n1]['y'] + self.graph.nodes[n2]['y']) / 2, h=0)
+                        midpoint, label='v', x=x,y=y, h=1 - old_edge_b)
                     midpoints[midpoint] = (n1, n2)
 
-            # Add new quadrilateral elements
-            self.graph.add_node(f'Q1', label='Q', R=0)
+            # Create new center node
+            x = fmean([self.graph.nodes[neighbor].get('x') for _, neighbor in enumerate(neighbors)])
+            y = fmean([self.graph.nodes[neighbor].get('y') for _, neighbor in enumerate(neighbors)])
+            center_node = f'v:{x}:{y}'
+            self.graph.add_node(center_node, label='v', x=x, y=y, h=0)
+
+            # print(node)
+            # print(neighbors)
+            # print(midpoints)
+
+            # Connect new vertices with center and old ones
             for mp, (n1, n2) in midpoints.items():
-                self.graph.add_edge(mp, n1, label='E', B=0)
-                self.graph.add_edge(mp, n2, label='E', B=0)
-                self.graph.add_edge(mp, f'Q1', label='E', B=0)
+                old_edge = self.graph.get_edge_data(n1, n2)
+                self.graph.remove_edge(n1, n2)
+                self.graph.add_edge(mp, n1, label='E', B=old_edge['B'])
+                self.graph.add_edge(mp, n2, label='E', B=old_edge['B'])
+                self.graph.add_edge(mp, center_node, label='E', B=0)
+
+            # Add new quadrilateral elements
+            for i, node in enumerate(neighbors):
+                neighbors_of_node = list(self.graph.neighbors(node))
+                x = fmean([self.graph.nodes[neighbor].get('x') for _, neighbor in enumerate(neighbors_of_node + [center_node])])
+                y = fmean([self.graph.nodes[neighbor].get('y') for _, neighbor in enumerate(neighbors_of_node + [center_node])])
+                q = f'Q:{x}:{y}'
+                self.graph.add_node(q, label='Q', R='0')
+                self.graph.add_edge(q, node)
+                self.graph.add_edge(q, neighbors_of_node[0])
+                self.graph.add_edge(q, neighbors_of_node[1])
+                self.graph.add_edge(q, center_node)
+                # print(list(self.graph.neighbors(node)))
