@@ -40,12 +40,16 @@ if __name__ == '__main__':
     # visualize_graph(G)
 
     prod1 = ProductionP1(G)
+    # prod1.apply()
     prod1.apply()
     prod1.apply()
-    # visualize_graph(G)
-    # prod2 = ProductionP2(G)
-    # prod2.apply()
-    # visualize_graph(G)
+    # prod1.apply()
+    visualize_graph(G)
+    prod2 = ProductionP2(G)
+    prod2.apply()
+    prod2.apply()
+    prod2.apply()
+    visualize_graph(G)
     # visualize_graph(G)
 
 
