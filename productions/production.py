@@ -5,6 +5,7 @@ class Production(ABC):
     """Base class for graph productions."""
     def __init__(self, graph: nx.Graph):
         self.graph = graph
+        self.subgraph = None
 
     @abstractmethod
     def check(self):

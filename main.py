@@ -7,19 +7,19 @@ from productions.utils import visualize_graph
 if __name__ == '__main__':
 
     G = nx.Graph()
-    G.add_node('Q:5:5', label='Q', R=1)
+    G.add_node('Q:5.0:5.0', label='Q', R=1)
     G.add_nodes_from([
-        ('v:0:0', {'label': 'v', 'x': 0, 'y': 0, 'h': 0}),
-        ('v:10:0', {'label': 'v', 'x': 10, 'y': 0, 'h': 0}),
-        ('v:10:10', {'label': 'v', 'x': 10, 'y': 10, 'h': 0}),
-        ('v:0:10', {'label': 'v', 'x': 0, 'y': 10, 'h': 0})
+        ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
+        ('v:10.0:0.0', {'label': 'v', 'x': 10.0, 'y': 0.0, 'h': 0}),
+        ('v:10.0:10.0', {'label': 'v', 'x': 10.0, 'y': 10.0, 'h': 0}),
+        ('v:0.0:10.0', {'label': 'v', 'x': 0.0, 'y': 10.0, 'h': 0})
     ])
     G.add_edges_from([
-        ('v:0:0', 'v:10:0', {'label': 'E', 'B': 1}),
-        ('v:10:0', 'v:10:10', {'label': 'E', 'B': 1}),
-        ('v:10:10', 'v:0:10', {'label': 'E', 'B': 1}),
-        ('v:0:10', 'v:0:0', {'label': 'E', 'B': 1}),
-        ('Q:5:5', 'v:0:0'), ('Q:5:5', 'v:10:0'), ('Q:5:5', 'v:10:10'), ('Q:5:5', 'v:0:10')
+        ('v:0.0:0.0', 'v:10.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:10.0:0.0', 'v:10.0:10.0', {'label': 'E', 'B': 1}),
+        ('v:10.0:10.0', 'v:0.0:10.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:10.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('Q:5.0:5.0', 'v:0.0:0.0'), ('Q:5.0:5.0', 'v:10.0:0.0'), ('Q:5.0:5.0', 'v:10.0:10.0'), ('Q:5.0:5.0', 'v:0.0:10.0')
     ])
     # G.add_nodes_from([
     #     ('v1', {'label': 'v', 'x': 0, 'y': 0, 'h': 0}),
@@ -41,7 +41,12 @@ if __name__ == '__main__':
 
     prod1 = ProductionP1(G)
     prod1.apply()
-    visualize_graph(G)
+    prod1.apply()
+    # visualize_graph(G)
+    # prod2 = ProductionP2(G)
+    # prod2.apply()
+    # visualize_graph(G)
+    # visualize_graph(G)
 
 
     # prod2 = ProductionP2(G)
