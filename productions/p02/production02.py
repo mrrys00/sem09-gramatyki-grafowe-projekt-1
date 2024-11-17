@@ -1,43 +1,109 @@
 from ..production import Production
 
+from itertools import combinations
+from statistics import fmean
+
+from ..utils import visualize_graph
+
+
 class ProductionP2(Production):
     """
-    Production P2:
-    Similar to P1 but with a hanging node on one edge
+    Production P1:
+    Divides a quadrilateral into 4 smaller quadrilaterals
     """
 
     def check(self):
-        """Check if the production can be applied when a hanging node exists on one edge."""
+        """Check if the production can be applied on the selected quadrilateral."""
+        # Find nodes with R=1 (element marked for splitting) and h=0 for all vertices
         for node, data in self.graph.nodes(data=True):
             if data.get('label') == 'Q' and data.get('R') == 1:
                 neighbors = list(self.graph.neighbors(node))
-                hanging_count = sum(1 for n in neighbors if self.graph.nodes[n].get('h') == 1)
-                if hanging_count == 1:
-                    return node, neighbors
+                if all(self.graph.nodes[n].get('h') == 0 for n in neighbors):
+                    neighbors_edges_cnt = 0
+                    for (n1, n2) in combinations(neighbors, 2):
+                        if self.graph.has_edge(n1, n2):
+                            neighbors_edges_cnt += 1
+                    if neighbors_edges_cnt == 3:
+                        nodes_to_subgraph = [node] + neighbors
+                        self.subgraph = self.graph.__class__()
+                        self.subgraph.add_nodes_from((n, self.graph.nodes[n]) for n in nodes_to_subgraph)
+                        self.subgraph.add_edges_from(
+                            (n, nbr, d)
+                            for n, nbrs in self.graph.adj.items()
+                            if n in nodes_to_subgraph
+                            for nbr, d in nbrs.items()
+                            if nbr in nodes_to_subgraph
+                        )
+                        return node, neighbors  # Return the node and its neighbors if condition met
         return None
 
     def apply(self):
-        """Apply P2 to divide the quadrilateral with a hanging node."""
+        """Apply P1 to divide the quadrilateral."""
         result = self.check()
+        print(f'result: {result}')
         if result:
-            node, neighbors = result
+            q_node, neighbors = result
             # Remove the original node and its edges
-            self.graph.remove_node(node)
+            self.subgraph.remove_node(q_node)
+            self.graph.remove_node(q_node)
 
             # Create new nodes and edges for the divided structure
             midpoints = {}
-            for i, n1 in enumerate(neighbors):
-                n2 = neighbors[(i + 1) % len(neighbors)]
-                midpoint = f'M{n1}{n2}'
-                if midpoint not in midpoints:
-                    self.graph.add_node(
-                        midpoint, label='v', x=(self.graph.nodes[n1]['x'] + self.graph.nodes[n2]['x']) / 2,
-                        y=(self.graph.nodes[n1]['y'] + self.graph.nodes[n2]['y']) / 2, h=1 if i == 0 else 0)
-                    midpoints[midpoint] = (n1, n2)
+            for (n1, n2) in combinations(neighbors, 2):
+                # n2 = neighbors[(i + 1) % len(neighbors)]
+                if self.subgraph.get_edge_data(n1, n2):
+                    print(n1, n2)
+                    x = (self.subgraph.nodes[n1]['x'] + self.subgraph.nodes[n2]['x']) / 2
+                    y = (self.subgraph.nodes[n1]['y'] + self.subgraph.nodes[n2]['y']) / 2
+                    midpoint = f'v:{x}:{y}'
+                    old_edge_b = self.subgraph.get_edge_data(n1, n2)['B']
+                    if midpoint not in midpoints:
+                        self.subgraph.add_node(
+                            midpoint, label='v', x=x,y=y, h=1 - old_edge_b)
+                        midpoints[midpoint] = (n1, n2)
+
+            # Create new center node
+            x = fmean([self.subgraph.nodes[neighbor].get('x') for _, neighbor in enumerate(neighbors)])
+            y = fmean([self.subgraph.nodes[neighbor].get('y') for _, neighbor in enumerate(neighbors)])
+            center_node = f'v:{x}:{y}'
+            self.subgraph.add_node(center_node, label='v', x=x, y=y, h=0)
+
+            # print(node)
+            # print(neighbors)
+            # print(midpoints)
+
+            # Connect new vertices with center and old ones
+            for mp, (n1, n2) in midpoints.items():
+                old_edge = self.subgraph.get_edge_data(n1, n2)
+                self.subgraph.remove_edge(n1, n2)
+                self.graph.remove_edge(n1, n2)
+                self.subgraph.add_edge(mp, n1, label='E', B=old_edge['B'])
+                self.subgraph.add_edge(mp, n2, label='E', B=old_edge['B'])
+                self.subgraph.add_edge(mp, center_node, label='E', B=0)
+
+            print('a')
+            visualize_graph(self.subgraph)
 
             # Add new quadrilateral elements
-            self.graph.add_node(f'Q2', label='Q', R=0)
-            for mp, (n1, n2) in midpoints.items():
-                self.graph.add_edge(mp, n1, label='E', B=0)
-                self.graph.add_edge(mp, n2, label='E', B=0)
-                self.graph.add_edge(mp, f'Q2', label='E', B=0)
+            for node in neighbors:
+                neighbors_of_node = list(self.subgraph.neighbors(node))
+                print(neighbors_of_node)
+                x = fmean([self.subgraph.nodes[neighbor].get('x') for neighbor in neighbors_of_node + [node, center_node]])
+                y = fmean([self.subgraph.nodes[neighbor].get('y') for neighbor in neighbors_of_node + [node, center_node]])
+                q = f'Q:{x}:{y}'
+                self.subgraph.add_node(q, label='Q', R=1)
+                self.subgraph.add_edge(q, node)
+                self.subgraph.add_edge(q, neighbors_of_node[0])
+                self.subgraph.add_edge(q, center_node)
+                self.subgraph.add_edge(q, neighbors_of_node[1])
+                print(list(self.subgraph.neighbors(q)))
+
+            # Replace subgraph in graph
+            print(self.graph.nodes.data())
+            print(self.graph.edges.data())
+            print(self.graph)
+            self.graph.update(self.subgraph)
+            print(self.graph.nodes.data())
+            print(self.graph.edges.data())
+            print(self.graph)
+            # print(neighbors)
