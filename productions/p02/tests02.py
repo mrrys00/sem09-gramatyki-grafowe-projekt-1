@@ -5,7 +5,7 @@ from pytest import FixtureRequest
 
 from productions.p02.production02 import ProductionP2
 from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, \
-    prepare_valid_test_graph_with_hanging_node, visualize_graph
+    prepare_valid_test_graph_with_hanging_node
 
 G = prepare_valid_test_graph()
 G_h = prepare_valid_test_graph_with_hanging_node()
@@ -42,7 +42,6 @@ def test_positive_p02_apply_check(prepare_graph_positive_hanging: nx.Graph):
     """check is None after apply the production1"""
     G = prepare_graph_positive_hanging
     ProductionP2(prepare_graph_positive_hanging).apply()
-    visualize_graph(G)
     assert ProductionP2(prepare_graph_positive_hanging).check is None
 
 
