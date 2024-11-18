@@ -61,12 +61,12 @@ def prepare_valid_test_graph_with_hanging_node() -> nx.Graph:
         ('v2', {'label': 'v', 'x': 1, 'y': 0, 'h': 0}),
         ('v3', {'label': 'v', 'x': 1, 'y': 1, 'h': 0}),
         ('v4', {'label': 'v', 'x': 0, 'y': 1, 'h': 0}),
-        ('v5', {'label': 'v', 'x': 1, 'y': 0.5, 'h': 1})
+        ('v', {'label': 'v', 'x': 1, 'y': 0.5, 'h': 1})
     ])
     G.add_edges_from([
         ('v1', 'v2', {'label': 'E', 'B': 0}),
-        ('v2', 'v5', {'label': 'E', 'B': 0}),
-        ('v5', 'v3', {'label': 'E', 'B': 0}),
+        ('v2', 'v', {'label': 'E', 'B': 0}),
+        ('v', 'v3', {'label': 'E', 'B': 0}),
         ('v3', 'v4', {'label': 'E', 'B': 0}),
         ('v4', 'v1', {'label': 'E', 'B': 0}),
         ('Q', 'v1'), ('Q', 'v2'), ('Q', 'v3'), ('Q', 'v4')
