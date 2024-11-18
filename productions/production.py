@@ -44,6 +44,7 @@ class Production(ABC):
             self.subgraph.add_node(
                 midpoint, label='v', x=x, y=y, h=1 - old_edge_b)
             midpoints[midpoint] = (n1, n2)
+        return midpoint
 
     def _fill_graph(self, neighbors, midpoints):
         """Fill the subgraph with edges and new hyper edge"""
