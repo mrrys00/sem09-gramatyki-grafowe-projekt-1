@@ -19,12 +19,6 @@ test_production_03:
 test_production_04:
 	pytest -vrPs productions/p04/tests04.py
 
-test_production_05:
-	pytest -vrPs productions/p05/tests05.py
-
-test_production_06:
-	pytest -vrPs productions/p06/tests06.py
-
 test_production_07:
 	pytest -vrPs productions/p07/tests07.py
 
@@ -40,5 +34,8 @@ test_production_10:
 test_production_11:
 	pytest -vrPs productions/p11/tests11.py
 
-test_production_12:
-	pytest -vrPs productions/p12/tests12.py
+test_production_16:
+	pytest -vrPs productions/p16/tests16.py
+
+test_production_17:
+	pytest -vrPs productions/p17/tests17.py
