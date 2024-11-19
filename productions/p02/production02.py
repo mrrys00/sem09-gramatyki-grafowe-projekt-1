@@ -50,12 +50,8 @@ class ProductionP2(Production):
                         self.subgraph.nodes[n1]['y'] - self.subgraph.nodes[n2]['y']) == delta:
                     self.subgraph.add_edge(n1, n2, label='E', B=1)
                     self.graph.add_edge(n1, n2)
-                    midpoint = self._create_midpoint(midpoints, n1, n2)
-                    # Remove hanging node
-                    hanging_node = [node for node in self.graph.nodes if
-                                    self.graph.nodes[node]['x'] == self.subgraph.nodes[midpoint]['x'] and
-                                    self.graph.nodes[node]['y'] == self.subgraph.nodes[midpoint]['y']][0]
-                    self.graph.remove_node(hanging_node)
+                    _ = self._create_midpoint(midpoints, n1, n2)
+                    
 
             self._fill_graph(neighbors, midpoints)
 

@@ -76,3 +76,5 @@ def test_negative_p01_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""
     ProductionP1(prepare_graph_negative).apply()
     assert 'Q' not in prepare_graph_negative
+
+# TODO add tests for boundary, hanging node

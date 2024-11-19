@@ -14,7 +14,6 @@ G_n = prepare_corrupted_test_graph()
 
 @pytest.fixture(scope='function', params=[G])
 def prepare_graph_positive(request: type[FixtureRequest]):
-    request.param.nodes['v1']['h'] = 1
     yield request.param
 
 
@@ -90,3 +89,5 @@ def test_negative_p02_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""
     ProductionP2(prepare_graph_negative).apply()
     assert 'Q' not in prepare_graph_negative
+
+# TODO add tests for boundary, hanging node
