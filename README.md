@@ -13,7 +13,7 @@
 
 1. Każda grupa odbija się od branch `master` tworzy swojego brancha `prod-xx-yy-zz` (gdzie _xx_, _yy_, _zz_ to są numery produkcji implementowanych na branchu).
 2. Pracujemy tylko w swoich plikach w katalogu productions, możecie sobie testować w pliku main.py ale NIE WYPYCHAJCIE tych zmian na repo
-3. Pieszemy testy
+3. Piszemy testy
 4. Merge branchy do `master` robimy tylko przez Pull Requesta, wymagany minimum 1 approve, to sobie dawajcie sami nawzajem w obrębie swoich grup
 
 ## How to
