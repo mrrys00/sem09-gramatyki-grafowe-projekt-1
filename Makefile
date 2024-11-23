@@ -8,10 +8,10 @@ run_main:
 	python3 main.py
 
 test_production_01:
-	pytest -vrPs productions/p01/tests01.py
+	pytest -vrPs productions/p01/test_01.py
 
 test_production_02:
-	pytest -vrPs productions/p02/tests02.py
+	pytest -vrPs productions/p02/test_02.py
 
 test_production_03:
 	pytest -vrPs productions/p03/tests03.py
