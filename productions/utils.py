@@ -4,8 +4,8 @@ from statistics import fmean
 
 
 def visualize_graph(graph: nx.Graph, title: str = "Graph Visualization"):
-    multiedges_labels = ["Q", "P"]  # TODO might need to extend this list
     """Visualize the graph."""
+    multiedges_labels = ["Q", "P"]  # TODO might need to extend this list
     colors = [
         "lightblue" if data.get("label") in multiedges_labels else "lightgreen"
         for node, data in graph.nodes(True)
