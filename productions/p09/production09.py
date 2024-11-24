@@ -47,3 +47,40 @@ class ProductionP9(Production):
             self.graph.update(self.subgraph)
 
         # TODO implement
+
+
+# paste this to main class to see how this production works
+"""
+from productions.p09.production09 import ProductionP9
+
+    G = nx.Graph()
+    G.add_node("P:5.0:5.0", label="P", R=1)
+    G.add_nodes_from(
+        [
+            ("v:0.0:0.0", {"label": "v", "x": 0.0, "y": 0.0, "h": 0}),
+            ("v:10.0:0.0", {"label": "v", "x": 10.0, "y": 0.0, "h": 0}),
+            ("v:10.0:10.0", {"label": "v", "x": 10.0, "y": 10.0, "h": 0}),
+            ("v:0.0:10.0", {"label": "v", "x": 0.0, "y": 10.0, "h": 0}),
+            ("v:15.0:5.0", {"label": "v", "x": 15.0, "y": 5.0, "h": 0}),
+        ]
+    )
+    G.add_edges_from(
+        [
+            ("v:0.0:0.0", "v:10.0:0.0", {"label": "E", "B": 1}),
+            ("v:15.0:5.0", "v:10.0:10.0", {"label": "E", "B": 1}),
+            ("v:10.0:0.0", "v:15.0:5.0", {"label": "E", "B": 1}),
+            ("v:10.0:10.0", "v:0.0:10.0", {"label": "E", "B": 1}),
+            ("v:0.0:10.0", "v:0.0:0.0", {"label": "E", "B": 1}),
+            ("P:5.0:5.0", "v:0.0:0.0"),
+            ("P:5.0:5.0", "v:15.0:5.0"),
+            ("P:5.0:5.0", "v:10.0:0.0"),
+            ("P:5.0:5.0", "v:10.0:10.0"),
+            ("P:5.0:5.0", "v:0.0:10.0"),
+        ]
+    )
+
+    visualize_graph(G)
+    prod9 = ProductionP9(G)
+    prod9.apply()
+    visualize_graph(G)
+"""
