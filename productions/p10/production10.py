@@ -1,6 +1,8 @@
 from itertools import combinations
 
-from ..production import Production
+from networkx.classes import neighbors
+
+from productions.production import Production
 
 
 class ProductionP10(Production):
@@ -28,50 +30,32 @@ class ProductionP10(Production):
         return None
 
     def apply(self):
-        """Apply P10 to divide the pentagon with a hanging node."""
+        """Apply P10 to divide the pentagon."""
         result = self.check
         if result:
-            p_node, neighbors = result
-            self.subgraph.remove_node(p_node)
-            self.graph.remove_node(p_node)
+            q_node, nodes = result
+            # Remove the original node and its edges
+            self.subgraph.remove_node(q_node)
+            self.graph.remove_node(q_node)
 
-            delta = max(
-                abs(
-                    self.subgraph.nodes[neighbors[0]]["x"]
-                    - self.subgraph.nodes[neighbors[1]]["x"]
-                ),
-                abs(
-                    self.subgraph.nodes[neighbors[0]]["y"]
-                    - self.subgraph.nodes[neighbors[1]]["y"]
-                ),
-            )
+        # Create new nodes and edges for the divided structure
+        midpoints = {}
+        for (n1, n2) in combinations(nodes, 2):
+            # existing edges
+            if self.subgraph.get_edge_data(n1, n2):
+                self._create_midpoint(midpoints, n1, n2)
+            # artificially add edge to hanging node
+            elif abs(
+                    self.subgraph.nodes[n1]['x'] - self.subgraph.nodes[n2]['x']) + abs(
+                self.subgraph.nodes[n1]['y'] - self.subgraph.nodes[n2]['y']) == 10:
+                self.subgraph.add_edge(n1, n2, label='E', B=1)
+                self.graph.add_edge(n1, n2)
+                _ = self._create_midpoint(midpoints, n1, n2)
 
-            midpoints = {}
-            for n1, n2 in combinations(neighbors, 2):
-                if self.subgraph.get_edge_data(n1, n2):
-                    self._create_midpoint(midpoints, n1, n2)
-                elif (
-                    abs(self.subgraph.nodes[n1]["x"] - self.subgraph.nodes[n2]["x"])
-                    + abs(self.subgraph.nodes[n1]["y"] - self.subgraph.nodes[n2]["y"])
-                    == delta
-                ):
+        self._fill_graph(nodes, midpoints)
 
-                    self.subgraph.add_edge(n1, n2, label="E", B=1)
-                    self.graph.add_edge(n1, n2)
-                    midpoint = self._create_midpoint(midpoints, n1, n2)
-
-                    hanging_node = next(
-                        node
-                        for node in self.graph.nodes
-                        if self.graph.nodes[node]["x"]
-                        == self.subgraph.nodes[midpoint]["x"]
-                        and self.graph.nodes[node]["y"]
-                        == self.subgraph.nodes[midpoint]["y"]
-                    )
-                    self.graph.remove_node(hanging_node)
-
-            self._fill_graph(neighbors, midpoints)
-            self.graph.update(self.subgraph)
+        # Replace subgraph in graph
+        self.graph.update(self.subgraph)
 
 
 """

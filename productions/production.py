@@ -73,4 +73,5 @@ class Production(ABC):
             self.subgraph.add_edge(q, node)
             self.subgraph.add_edge(q, neighbors_of_node[0])
             self.subgraph.add_edge(q, center_node)
-            self.subgraph.add_edge(q, neighbors_of_node[1])
+            if len(neighbors_of_node) > 1:
+                self.subgraph.add_edge(q, neighbors_of_node[1])
