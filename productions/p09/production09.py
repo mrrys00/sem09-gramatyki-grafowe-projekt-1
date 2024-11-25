@@ -23,9 +23,9 @@ class ProductionP9(Production):
                             neighbors_edges_cnt += 1
                     print(neighbors_edges_cnt)
                     if neighbors_edges_cnt == 5:
-                        print("check passed")
+                        print("prod 09 can be applied to this graph")
                         return self._extract_subgraph(node, neighbors)
-        print("didnt pass check")
+        print("prod 09 can't be applied to this graph")
         return None
 
     def apply(self):
@@ -45,8 +45,6 @@ class ProductionP9(Production):
 
             self._fill_graph(neighbors, midpoints)
             self.graph.update(self.subgraph)
-
-        # TODO implement
 
 
 # paste this to main class to see how this production works
