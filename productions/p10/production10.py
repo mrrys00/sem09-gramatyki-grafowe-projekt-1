@@ -24,9 +24,9 @@ class ProductionP10(Production):
                             neighbors_edges_cnt += 1
                     print(neighbors_edges_cnt)
                     if neighbors_edges_cnt == 4:
-                        print("check passed")
+                        print("prod 10 can be applied to this graph")
                         return self._extract_subgraph(node, neighbors)
-        print("didnt pass check")
+        print("prod 10 can't be applied to this graph")
         return None
 
     def apply(self):
@@ -45,9 +45,7 @@ class ProductionP10(Production):
             if self.subgraph.get_edge_data(n1, n2):
                 self._create_midpoint(midpoints, n1, n2)
             # artificially add edge to hanging node
-            elif abs(
-                    self.subgraph.nodes[n1]['x'] - self.subgraph.nodes[n2]['x']) + abs(
-                self.subgraph.nodes[n1]['y'] - self.subgraph.nodes[n2]['y']) == 10:
+            elif self.subgraph.degree(n1) == 1 and self.subgraph.degree(n2) == 1:
                 self.subgraph.add_edge(n1, n2, label='E', B=1)
                 self.graph.add_edge(n1, n2)
                 _ = self._create_midpoint(midpoints, n1, n2)
