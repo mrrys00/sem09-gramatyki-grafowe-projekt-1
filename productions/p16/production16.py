@@ -6,20 +6,24 @@ from ..production import Production
 class ProductionP16(Production):
     """
     Production P16:
-    #TODO write documentation
+    Marks the pentagon elements as breakable. 
     """
 
     @property
     def check(self):
-        """#TODO write documentation"""
-        #TODO implement
-
+        """Checks if the production can be applied to the selected pentagon."""
+        for node, data in self.graph.nodes(data=True):
+            if data.get("label") == "R" and data.get("R") == 0:
+                print("check passed")
+                neighbors = list(self.graph.neighbors(node))
+                return self._extract_subgraph(node, neighbors)
+        print("didnt pass check")
         return None
 
     def apply(self):
-        """#TODO write documentation"""
+        """Apply P16 to mark the pentagon elements as breakable."""
+
         result = self.check
         if result:
-            pass
-
-        #TODO implement
+            r_node, neighbors = result
+            self.graph.nodes[r_node]['R'] = 1 
