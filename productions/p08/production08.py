@@ -3,6 +3,7 @@ from itertools import combinations
 from networkx.classes import all_neighbors
 
 from ..production import Production
+from collections import Counter
 
 
 class ProductionP8(Production):
@@ -29,16 +30,24 @@ class ProductionP8(Production):
                             for node_2 in primary:
                                 r_node_2 = self.graph.nodes[node_2]
                                 if r_node_2.get('label') == 'Q' and r_node_2.get('R') == 0:
+                                    r_neighbours = list(self.graph.neighbors(node_2))
                                     for neighbor in secondary:
                                         if neighbor != excluded and neighbor in self.graph.neighbors(node_2):
-                                            whole_except_q = neighbors + list(self.graph.neighbors(node_2)) + [node]
-                                            return self._extract_subgraph(node_2, whole_except_q)
+                                            whole_except_q = neighbors + list(r_neighbours) + [node]
 
-                        check_neighbors(neighbors1, neighbors2, n1)
-                        check_neighbors(neighbors2, neighbors1, n2)
+                                            counts = Counter(whole_except_q)
+
+                                            unique_items = [item for item in whole_except_q if counts[item] == 1]
+
+                                            return self._extract_subgraph(node_2, unique_items)
+
+                        a = check_neighbors(neighbors1, neighbors2, n1)
+                        b = check_neighbors(neighbors2, neighbors1, n2)
+
+                        result = next((x for x in (a,b) if x is not None), None)
 
 
-        return None
+        return result
 
     def apply(self):
         """Apply P8 to mark for breaking the quadrilateral."""
