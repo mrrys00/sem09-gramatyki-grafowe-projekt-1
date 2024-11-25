@@ -26,8 +26,6 @@ class ProductionP3(Production):
                     for n in self.graph.neighbors(neighbor):
                         if self.graph.nodes[n].get('h') == 1 and n != 'Q' and n not in hanging_nodes:
                             hanging_nodes.append(n)
-                print(corner_nodes)
-                print(hanging_nodes)
 
                 if len(corner_nodes) == 4 and len(hanging_nodes) == 2:
                     subgraph = nx.subgraph(self.graph, (*corner_nodes, *hanging_nodes, node))
