@@ -30,8 +30,11 @@ class ProductionP3(Production):
                 if len(corner_nodes) == 4 and len(hanging_nodes) == 2:
                     r = self.graph.nodes[node].get('R')
                     if r != None:
-                        subgraph = nx.subgraph(self.graph, (*corner_nodes, *hanging_nodes, node))
-                        if isomorphism.GraphMatcher(subgraph, self.graph).is_isomorphic():
+                        neighbors_edges_cnt = 0
+                        for (n1, n2) in combinations(neighbors, 2):
+                            if self.graph.has_edge(n1, n2):
+                                neighbors_edges_cnt += 1
+                        if neighbors_edges_cnt == 2:
                             return self._extract_subgraph(node, neighbors)
         
         return None
