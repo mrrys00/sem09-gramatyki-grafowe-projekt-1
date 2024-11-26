@@ -13,7 +13,7 @@ class ProductionP16(Production):
     def check(self):
         """Checks if the production can be applied to the selected pentagon."""
         for node, data in self.graph.nodes(data=True):
-            if data.get("label") == "R" and data.get("R") == 0:
+            if data.get("label") == "P" and data.get("R") == 0:
                 print("check passed")
                 neighbors = list(self.graph.neighbors(node))
                 return self._extract_subgraph(node, neighbors)
