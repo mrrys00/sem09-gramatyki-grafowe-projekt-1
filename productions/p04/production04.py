@@ -26,12 +26,16 @@ class ProductionP4(Production):
                     for n in self.graph.neighbors(neighbor):
                         if self.graph.nodes[n].get('h') == 1 and n != 'Q' and n not in hanging_nodes:
                             hanging_nodes.append(n)
-
+                            
                 if len(corner_nodes) == 4 and len(hanging_nodes) == 2:
                     r = self.graph.nodes[node].get('R')
                     if r != None:
-                        subgraph = nx.subgraph(self.graph, (*corner_nodes, *hanging_nodes, node))
-                        if isomorphism.GraphMatcher(subgraph, self.graph).is_isomorphic():
+                        neighbors_edges_cnt = 0
+                        for (n1, n2) in combinations(neighbors, 2):
+                            if self.graph.has_edge(n1, n2):
+                                neighbors_edges_cnt += 1
+                        print(neighbors_edges_cnt)
+                        if neighbors_edges_cnt == 2:
                             return self._extract_subgraph(node, neighbors)
         
         return None
