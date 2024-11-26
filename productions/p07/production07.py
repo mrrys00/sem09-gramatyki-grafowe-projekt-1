@@ -1,25 +1,25 @@
-from itertools import combinations
-
 from ..production import Production
-
 
 class ProductionP7(Production):
     """
     Production P7:
-    #TODO write documentation
+    Virtual Adaptation: Marking Quadrilateral Elements for Splitting
     """
 
     @property
     def check(self):
-        """#TODO write documentation"""
-        #TODO implement
-
+        """
+        Check if the production can be applied on quadrilateral elements with R == 0.
+        """
+        for node, data in self.graph.nodes(data=True):
+            if data.get('label') == 'Q' and data.get('R') == 0:
+                return node
         return None
 
     def apply(self):
-        """#TODO write documentation"""
-        result = self.check
-        if result:
-            pass
-
-        #TODO implement
+        """
+        Apply P7 to mark the quadrilateral for splitting.
+        """
+        q_node = self.check
+        if q_node is not None:
+            self.graph.nodes[q_node]['R'] = 1

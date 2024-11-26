@@ -95,6 +95,104 @@ def prepare_valid_test_graph_with_hanging_node() -> nx.Graph:
 
     return G
 
+def prepare_valid_test_graph_with_hanging_node_p3() -> nx.Graph:
+    """Prepares the basic 4-nodes and one Q-node graph"""
+    G = nx.Graph()
+    G.add_node('Q', label='Q', R=1)
+    G.add_nodes_from([
+        ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
+        ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
+        ('v:1.0:1.0', {'label': 'v', 'x': 1.0, 'y': 1.0, 'h': 0}),
+        ('v:0.0:1.0', {'label': 'v', 'x': 0.0, 'y': 1.0, 'h': 0}),
+        ('v:1.0:0.5', {'label': 'v', 'x': 1.0, 'y': 0.5, 'h': 1}),
+        ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 1})
+
+    ])
+    G.add_edges_from([
+        ('v:0.0:0.0', 'v:0.5:0.0', {'label': 'E', 'B': 1}),
+        ('v:0.5:0.0', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:0.0', 'v:1.0:0.5', {'label': 'E', 'B': 1}),
+        ('v:1.0:0.5', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:1.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:1.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('Q', 'v:0.0:0.0'), ('Q', 'v:1.0:0.0'), ('Q', 'v:1.0:1.0'), ('Q', 'v:0.0:1.0')
+    ])
+
+    return G
+
+def prepare_valid_test_graph_with_hanging_node_p4() -> nx.Graph:
+    """Prepares the basic 4-nodes and one Q-node graph"""
+    G = nx.Graph()
+    G.add_node('Q', label='Q', R=1)
+    G.add_nodes_from([
+        ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
+        ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
+        ('v:1.0:1.0', {'label': 'v', 'x': 1.0, 'y': 1.0, 'h': 0}),
+        ('v:0.0:1.0', {'label': 'v', 'x': 0.0, 'y': 1.0, 'h': 0}),
+        ('v:0.0:0.5', {'label': 'v', 'x': 0.0, 'y': 0.5, 'h': 1}),
+        ('v:1.0:0.5', {'label': 'v', 'x': 1.0, 'y': 0.5, 'h': 1})
+
+    ])
+    G.add_edges_from([
+        ('v:0.0:0.0', 'v:0.0:0.5', {'label': 'E', 'B': 1}),
+        ('v:0.0:0.5', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:0.0', 'v:1.0:0.5', {'label': 'E', 'B': 1}),
+        ('v:1.0:0.5', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:1.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:1.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:0.0', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
+        ('Q', 'v:0.0:0.0'), ('Q', 'v:1.0:0.0'), ('Q', 'v:1.0:1.0'), ('Q', 'v:0.0:1.0')
+    ])
+
+    return G
+
+def prepare_graph_with_R0_quadrilateral() -> nx.Graph:
+    """Prepares a graph with a quadrilateral element where R == 0."""
+    G = nx.Graph()
+    G.add_node('Q1', label='Q', R=0)
+    G.add_nodes_from([
+        ('v0', {'label': 'v', 'x': 0, 'y': 0}),
+        ('v1', {'label': 'v', 'x': 1, 'y': 0}),
+        ('v2', {'label': 'v', 'x': 1, 'y': 1}),
+        ('v3', {'label': 'v', 'x': 0, 'y': 1})
+    ])
+    G.add_edges_from([
+        ('Q1', 'v0'),
+        ('Q1', 'v1'),
+        ('Q1', 'v2'),
+        ('Q1', 'v3')
+    ])
+    G.add_edges_from([
+        ('v0', 'v1'),
+        ('v1', 'v2'),
+        ('v2', 'v3'),
+        ('v3', 'v0')
+    ])
+    return G
+
+def prepare_graph_without_R0_quadrilateral() -> nx.Graph:
+    """Prepares a graph where no quadrilateral elements have R == 0."""
+    G = nx.Graph()
+    G.add_node('Q1', label='Q', R=1)
+    G.add_nodes_from([
+        ('v0', {'label': 'v', 'x': 0, 'y': 0}),
+        ('v1', {'label': 'v', 'x': 1, 'y': 0}),
+        ('v2', {'label': 'v', 'x': 1, 'y': 1}),
+        ('v3', {'label': 'v', 'x': 0, 'y': 1})
+    ])
+    G.add_edges_from([
+        ('Q1', 'v0'),
+        ('Q1', 'v1'),
+        ('Q1', 'v2'),
+        ('Q1', 'v3')
+    ])
+    G.add_edges_from([
+        ('v0', 'v1'),
+        ('v1', 'v2'),
+        ('v2', 'v3'),
+        ('v3', 'v0')
+    ])
+    return G
 
 def prepare_corrupted_test_graph() -> nx.Graph:
     """Prepares the basic 4-nodes graph"""
