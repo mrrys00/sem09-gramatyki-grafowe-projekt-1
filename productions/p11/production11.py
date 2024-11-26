@@ -33,7 +33,9 @@ class ProductionP11(Production):
                             common_neighbors = neighbors1 & neighbors2
 
                             # Filter common neighbors by label
-                            return [n for n in common_neighbors if self.graph.nodes[n].get('label') == label and n not in neighbors]
+                            return [n for n in common_neighbors if
+                                    self.graph.nodes[n].get('label') == label and n not in neighbors]
+
                         results = list()
                         results.append(get_common_neighbors_with_label(n1, n2, 'v'))
                         results.append(get_common_neighbors_with_label(n1, n3, 'v'))
@@ -48,9 +50,10 @@ class ProductionP11(Production):
                                 return True, list(set(single_element_lists))
 
                             return False, ()
-                        result,vertices = check_one_empty_two_with_distinct_vertex(results)
+
+                        result, vertices = check_one_empty_two_with_distinct_vertex(results)
                         if result:
-                            return self._extract_subgraph(node, neighbors+vertices)
+                            return self._extract_subgraph(node, neighbors + vertices)
 
         return None
 
@@ -62,8 +65,10 @@ class ProductionP11(Production):
             # Remove the original node and its edges
             neighbors = list(self.graph.neighbors(q_node))
             not_neighbors = [item for item in nodes if item not in neighbors]
+
             for n in not_neighbors:
                 self.subgraph.nodes[n]['h'] = 0
+
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
 
@@ -73,10 +78,9 @@ class ProductionP11(Production):
                 # existing edges
                 data = self.subgraph.get_edge_data(n1, n2)
                 if data:
-                    if n1 in neighbors and n2  in neighbors:
+                    if n1 in neighbors and n2 in neighbors:
                         midpoint = self._create_midpoint(midpoints, n1, n2)
-                        self.subgraph.nodes[midpoint]['h'] = -data['B']
-
+                        self.subgraph.nodes[midpoint]['h'] = 1 - data['B']
 
             self._fill_graph(neighbors, midpoints)
 
