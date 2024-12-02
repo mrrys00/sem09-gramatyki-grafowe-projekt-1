@@ -17,7 +17,7 @@ class ProductionP17(Production):
             """Helper to check neighbor conditions and extract the subgraph."""
             for neighbor in primary_neighbors:
                 neighbor_data = self.graph.nodes[neighbor]
-                if neighbor_data.get('label') == 'Q' and neighbor_data.get('R') == 0:
+                if neighbor_data.get('label') == 'P' and neighbor_data.get('R') == 0:
                     neighbor_subgraph_nodes = list(self.graph.neighbors(neighbor))
                     for secondary in secondary_neighbors:
                         if secondary != excluded_neighbor and secondary in self.graph.neighbors(neighbor):
@@ -29,7 +29,7 @@ class ProductionP17(Production):
         for node, data in self.graph.nodes(data=True):
             if data.get('label') == 'Q' and data.get('R') == 1:
                 neighbors = list(self.graph.neighbors(node))
-                if len(neighbors) != 5:
+                if len(neighbors) != 4:
                     continue
 
                 for n1, n2 in combinations(neighbors, 2):
@@ -49,6 +49,7 @@ class ProductionP17(Production):
     def apply(self):
         """Apply P17 to the pentagon if possible."""
         result = self.check
+        print(result)
         if result:
             q_node, neighbors = result
 

@@ -3,9 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="4ebcf0d1-993b-4a4b-9898-548a3ffb8a4d" name="Changes" comment="rebase changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/productions/p08/production08.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p08/production08.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productions/p08/tests08.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p08/tests08.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/productions/p11/production11.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p11/production11.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productions/p11/tests11.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p11/tests11.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/productions/p17/production17.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p17/production17.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productions/p17/tests17.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p17/tests17.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/productions/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +34,19 @@
     &quot;last_opened_file_path&quot;: &quot;/Users/konradkrzeminski/PycharmProjects/sem09-gramatyki-grafowe-projekt-1&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
+    <configuration name="Makefile" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="test_production_11" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="test_production_11" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="sem09-gramatyki-grafowe-projekt-1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -53,9 +68,50 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="sem09-gramatyki-grafowe-projekt-1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/productions" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/productions/utils.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in tests11.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="sem09-gramatyki-grafowe-projekt-1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/productions/p11" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/productions/p11/tests11.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Makefile Target.test_production_11" />
+        <item itemvalue="Makefile Target.Makefile" />
+        <item itemvalue="Python tests.pytest in tests11.py" />
+        <item itemvalue="Python.utils" />
       </list>
     </recent_temporary>
   </component>

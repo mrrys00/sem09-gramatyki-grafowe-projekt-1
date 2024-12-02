@@ -1,6 +1,7 @@
 from itertools import combinations
 from statistics import fmean
 
+import networkx as nx
 from networkx.classes import neighbors
 
 from ..production import Production
@@ -16,42 +17,44 @@ class ProductionP11(Production):
     @property
     def check(self):
         """Check if the production can be applied on the selected pentagon."""
-        for node, data in self.graph.nodes(data=True):
-            if data.get('label') == 'P' and data.get('R') == 1:
-                neighbors = list(self.graph.neighbors(node))
-                if len(neighbors) != 5:
-                    continue
-                if any(self.graph.nodes[n].get('h') != 0 for n in neighbors):
-                    continue
+        hanging_nodes = [n for n, data in self.graph.nodes(data=True) if data.get('h') == 1]
 
-                for n1, n2, n3 in combinations(neighbors, 3):
-                    if not (self.graph.has_edge(n1, n2) or self.graph.has_edge(n2, n3) or self.graph.has_edge(n3, n1)):
-                        def get_common_neighbors_with_label(node1, node2, label):
-                            # Find common neighbors
-                            neighbors1 = set(self.graph.neighbors(node1))
-                            neighbors2 = set(self.graph.neighbors(node2))
-                            common_neighbors = neighbors1 & neighbors2
+        for n1, n2 in combinations(hanging_nodes, 2):
+            if nx.shortest_path_length(self.graph, source=n1, target=n2) == 2:
 
-                            # Filter common neighbors by label
-                            return [n for n in common_neighbors if self.graph.nodes[n].get('label') == label and n not in neighbors]
-                        results = list()
-                        results.append(get_common_neighbors_with_label(n1, n2, 'v'))
-                        results.append(get_common_neighbors_with_label(n1, n3, 'v'))
-                        results.append(get_common_neighbors_with_label(n2, n3, 'v'))
+                for node, data in self.graph.nodes(data=True):
+                    if data.get('label') == 'P' and data.get('R') == 1:
+                        neighbors = list(self.graph.neighbors(node))
+                        if len(neighbors) != 5:
+                            continue
 
-                        def check_one_empty_two_with_distinct_vertex(results):
-                            empty_count = sum(1 for res in results if not res)
-                            single_element_lists = [res[0] for res in results if len(res) == 1]
+                        for n1, n2, n3 in combinations(neighbors, 3):
+                            if not (self.graph.has_edge(n1, n2) or self.graph.has_edge(n2, n3) or self.graph.has_edge(n3, n1)):
+                                def get_common_neighbors_with_label(node1, node2, label):
+                                    # Find common neighbors
+                                    neighbors1 = set(self.graph.neighbors(node1))
+                                    neighbors2 = set(self.graph.neighbors(node2))
+                                    common_neighbors = neighbors1 & neighbors2
 
-                            if empty_count == 1 and len(single_element_lists) == 2 and len(
-                                    set(single_element_lists)) == 2:
-                                return True, list(set(single_element_lists))
+                                    # Filter common neighbors by label
+                                    return [n for n in common_neighbors if self.graph.nodes[n].get('label') == label and n not in neighbors]
+                                results = list()
+                                results.append(get_common_neighbors_with_label(n1, n2, 'v'))
+                                results.append(get_common_neighbors_with_label(n1, n3, 'v'))
+                                results.append(get_common_neighbors_with_label(n2, n3, 'v'))
 
-                            return False, ()
-                        result,vertices = check_one_empty_two_with_distinct_vertex(results)
-                        if result:
-                            return self._extract_subgraph(node, neighbors+vertices)
+                                def check_one_empty_two_with_distinct_vertex(results):
+                                    empty_count = sum(1 for res in results if not res)
+                                    single_element_lists = [res[0] for res in results if len(res) == 1]
 
+                                    if empty_count == 1 and len(single_element_lists) == 2 and len(
+                                            set(single_element_lists)) == 2:
+                                        return True, list(set(single_element_lists))
+
+                                    return False, ()
+                                result,vertices = check_one_empty_two_with_distinct_vertex(results)
+                                if result:
+                                    return self._extract_subgraph(node, neighbors+vertices)
         return None
 
     def apply(self):
