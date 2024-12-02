@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ebcf0d1-993b-4a4b-9898-548a3ffb8a4d" name="Changes" comment="rebase changes">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sem09-gramatyki-grafowe-projekt-1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/productions/p08/production08.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p08/production08.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productions/p11/production11.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/p11/production11.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/productions/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/productions/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
