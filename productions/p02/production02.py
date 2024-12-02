@@ -37,7 +37,7 @@ class ProductionP2(Production):
                 if self.subgraph.get_edge_data(n1, n2):
                     subgraph_matrix[n1].append(n2)
                     subgraph_matrix[n2].append(n1)
-            lone_vertices = list(filter(lambda x: len(subgraph_matrix[x]) == 1, subgraph_matrix.keys()))
+            lone_vertices = list(filter(lambda n: len(subgraph_matrix[n]) == 1, subgraph_matrix.keys()))
             x = (self.subgraph.nodes[lone_vertices[0]]['x'] + self.subgraph.nodes[lone_vertices[1]]['x']) / 2
             y = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[1]]['y']) / 2
             hanging_node = f'v:{x}:{y}'
@@ -48,10 +48,6 @@ class ProductionP2(Production):
             # Remove the original node and its edges
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
-
-            # Obtain delta between vertices
-            delta = max(abs(self.subgraph.nodes[neighbors[0]]['x'] - self.subgraph.nodes[neighbors[1]]['x']),
-                        abs(self.subgraph.nodes[neighbors[0]]['y'] - self.subgraph.nodes[neighbors[1]]['y']))
 
             # Create new nodes and edges for the divided structure
             midpoints = {}
