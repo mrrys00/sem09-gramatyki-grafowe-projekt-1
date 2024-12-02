@@ -10,12 +10,12 @@ from ..utils import visualize_graph
 class ProductionP11(Production):
     """
     Production P11:
-    Breaking quintilateral int 5 smaller quadrilaterals
+    Breaking pentagon int 5 smaller quadrilaterals
     """
 
     @property
     def check(self):
-        """Check if the production can be applied on the selected quintilateral."""
+        """Check if the production can be applied on the selected pentagon."""
         for node, data in self.graph.nodes(data=True):
             if data.get('label') == 'P' and data.get('R') == 1:
                 neighbors = list(self.graph.neighbors(node))
@@ -55,7 +55,7 @@ class ProductionP11(Production):
         return None
 
     def apply(self):
-        """Breaking quintilateral int 5 smaller quadrilaterals if possible."""
+        """Apply P11 to pentagon if possible."""
         result = self.check
         if result:
             q_node, nodes = result

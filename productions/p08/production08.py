@@ -47,7 +47,7 @@ class ProductionP8(Production):
         return None
 
     def apply(self):
-        """Apply P8 to mark for breaking the quadrilateral."""
+        """Apply P8 to the quadrilateral if possible."""
         result = self.check
         if result:
             q_node, neighbors = result
