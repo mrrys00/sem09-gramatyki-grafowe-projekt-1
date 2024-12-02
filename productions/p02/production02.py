@@ -31,13 +31,23 @@ class ProductionP2(Production):
         result = self.check
         if result:
             q_node, neighbors = result
+
+            subgraph_matrix = {node: [] for node in neighbors}
+            for (n1, n2) in combinations(neighbors, 2):
+                if self.subgraph.get_edge_data(n1, n2):
+                    subgraph_matrix[n1].append(n2)
+                    subgraph_matrix[n2].append(n1)
+            lone_vertices = list(filter(lambda n: len(subgraph_matrix[n]) == 1, subgraph_matrix.keys()))
+            x = (self.subgraph.nodes[lone_vertices[0]]['x'] + self.subgraph.nodes[lone_vertices[1]]['x']) / 2
+            y = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[1]]['y']) / 2
+            hanging_node = f'v:{x}:{y}'
+            _b = self.graph.get_edge_data(lone_vertices[0], hanging_node)['B']
+            self.subgraph.add_edge(lone_vertices[0], lone_vertices[1], label='E', B=_b)
+            self.graph.add_edge(lone_vertices[0], lone_vertices[1])
+
             # Remove the original node and its edges
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
-
-            # Obtain delta between vertices
-            delta = max(abs(self.subgraph.nodes[neighbors[0]]['x'] - self.subgraph.nodes[neighbors[1]]['x']),
-                        abs(self.subgraph.nodes[neighbors[0]]['y'] - self.subgraph.nodes[neighbors[1]]['y']))
 
             # Create new nodes and edges for the divided structure
             midpoints = {}
@@ -45,13 +55,6 @@ class ProductionP2(Production):
                 # existing edges
                 if self.subgraph.get_edge_data(n1, n2):
                     self._create_midpoint(midpoints, n1, n2)
-                # artificially add edge to hanging node
-                elif abs(self.subgraph.nodes[n1]['x'] - self.subgraph.nodes[n2]['x']) + abs(
-                        self.subgraph.nodes[n1]['y'] - self.subgraph.nodes[n2]['y']) == delta:
-                    self.subgraph.add_edge(n1, n2, label='E', B=1)
-                    self.graph.add_edge(n1, n2)
-                    _ = self._create_midpoint(midpoints, n1, n2)
-                    
 
             self._fill_graph(neighbors, midpoints)
 
