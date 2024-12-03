@@ -49,7 +49,6 @@ class ProductionP17(Production):
     def apply(self):
         """Apply P17 to the pentagon if possible."""
         result = self.check
-        print(result)
         if result:
             q_node, neighbors = result
 
