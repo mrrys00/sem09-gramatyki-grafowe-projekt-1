@@ -40,9 +40,10 @@ class Production(ABC):
         y = (self.subgraph.nodes[n1]['y'] + self.subgraph.nodes[n2]['y']) / 2
         midpoint = f'v:{x}:{y}'
         old_edge_b = self.subgraph.get_edge_data(n1, n2)['B']
+        h = 0 if midpoint in self.graph.nodes else 1 - old_edge_b
         if midpoint not in midpoints:
             self.subgraph.add_node(
-                midpoint, label='v', x=x, y=y, h=1 - old_edge_b)
+                midpoint, label='v', x=x, y=y, h=h)
             midpoints[midpoint] = (n1, n2)
         return midpoint
 
