@@ -41,17 +41,37 @@ class ProductionP3(Production):
 
 
     def apply(self):
-        """Apply P2 to divide the quadrilateral."""
+        """Apply P3 to divide the quadrilateral."""
         result = self.check
         if result:
             q_node, neighbors = result
+
+            subgraph_matrix = {node: [] for node in neighbors}
+            for (n1, n2) in combinations(neighbors, 2):
+                if self.subgraph.get_edge_data(n1, n2):
+                    subgraph_matrix[n1].append(n2)
+                    subgraph_matrix[n2].append(n1)
+            lone_vertices = list(filter(lambda n: len(subgraph_matrix[n]) == 1, subgraph_matrix.keys()))
+
+            mid_x1 = (self.subgraph.nodes[lone_vertices[0]]['x'] + self.subgraph.nodes[lone_vertices[1]]['x']) / 2
+            mid_y1 = self.subgraph.nodes[lone_vertices[0]]['y'] 
+            hanging_node1 = f'v:{mid_x1}:{mid_y1}'
+
+            mid_x2 = self.subgraph.nodes[lone_vertices[1]]['x'] 
+            mid_y2 = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[1]]['y']) / 2
+            hanging_node2 = f'v:{mid_x2}:{mid_y2}'
+
+            _b1 = self.graph.get_edge_data(lone_vertices[0], hanging_node1)['B']
+            self.subgraph.add_edge(lone_vertices[0], 'v:1.0:0.0', label='E', B=_b1)
+            self.graph.add_edge(lone_vertices[0], 'v:1.0:0.0')
+
+            _b2 = self.graph.get_edge_data(lone_vertices[1], hanging_node2)['B']
+            self.subgraph.add_edge('v:1.0:0.0', lone_vertices[1], label='E', B=_b2)
+            self.graph.add_edge('v:1.0:0.0', lone_vertices[1])
+            
             # Remove the original node and its edges
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
-
-            # Obtain delta between vertices
-            delta = max(abs(self.subgraph.nodes[neighbors[0]]['x'] - self.subgraph.nodes[neighbors[1]]['x']),
-                        abs(self.subgraph.nodes[neighbors[0]]['y'] - self.subgraph.nodes[neighbors[1]]['y']))
 
             # Create new nodes and edges for the divided structure
             midpoints = {}
@@ -59,13 +79,6 @@ class ProductionP3(Production):
                 # existing edges
                 if self.subgraph.get_edge_data(n1, n2):
                     self._create_midpoint(midpoints, n1, n2)
-                # artificially add edge to hanging node
-                elif abs(self.subgraph.nodes[n1]['x'] - self.subgraph.nodes[n2]['x']) + abs(
-                        self.subgraph.nodes[n1]['y'] - self.subgraph.nodes[n2]['y']) == delta:
-                    self.subgraph.add_edge(n1, n2, label='E', B=1)
-                    self.graph.add_edge(n1, n2)
-                    _ = self._create_midpoint(midpoints, n1, n2)
-                    
 
             self._fill_graph(neighbors, midpoints)
 
