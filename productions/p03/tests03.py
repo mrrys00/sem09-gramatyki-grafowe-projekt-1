@@ -4,12 +4,13 @@ import networkx as nx
 from pytest import FixtureRequest
 
 from productions.p03.production03 import ProductionP3
-from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_valid_test_graph_with_hanging_node_p3
-
+from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_valid_test_graph_with_hanging_node_p3, prepare_valid_test_graph_with_hanging_node_p3_test1, prepare_valid_test_graph_with_hanging_node_p3_test2
 
 G = prepare_valid_test_graph()
 G_h = prepare_valid_test_graph_with_hanging_node_p3()
 G_n= prepare_corrupted_test_graph()
+G_t1 = prepare_valid_test_graph_with_hanging_node_p3_test1()
+G_t2 = prepare_valid_test_graph_with_hanging_node_p3_test2()
 
 @pytest.fixture(scope='function', params=[G])
 def prepare_graph_positive(request: type[FixtureRequest]):
@@ -23,6 +24,13 @@ def prepare_graph_positive_hanging(request: type[FixtureRequest]):
 def prepare_graph_negative(request: type[FixtureRequest]):
     yield request.param
 
+@pytest.fixture(scope='function', params=[G_t1])
+def prepare_graph_with_two_G3(request: type[FixtureRequest]):
+    yield request.param
+
+@pytest.fixture(scope='function', params=[G_t2])
+def prepare_graph_with_two_G3_and_two_squares(request: type[FixtureRequest]):
+    yield request.param
 
 def test_positive_p03_check(prepare_graph_positive: nx.Graph):
     """check is not None if the graph is valid"""
@@ -105,3 +113,40 @@ def test_negative_p03_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""
     ProductionP3(prepare_graph_negative).apply()
     assert 'Q' not in prepare_graph_negative
+
+def test_test1_graph(prepare_graph_with_two_G3: nx.Graph):
+    prod3 = ProductionP3(prepare_graph_with_two_G3)
+
+    expected_h_nodes_number = 4
+    h_nodes = [(v) for v,data in prepare_graph_with_two_G3.nodes(data=True)
+               if data['label'] != 'Q' and data['h'] == 1]
+    assert len(h_nodes) == expected_h_nodes_number
+    
+    prod3.apply()
+    prod3.apply()
+    
+    expected_q_nodes_number = 5
+    q_nodes = [s for s in prepare_graph_with_two_G3.nodes() if 'Q' in s]
+
+    assert len(q_nodes) == expected_q_nodes_number
+
+    expected_v_nodes_number = 15
+    assert len([s for s in prepare_graph_with_two_G3.nodes() if 'v' in s]) == expected_v_nodes_number
+
+def test_test2_graph(prepare_graph_with_two_G3_and_two_squares: nx.Graph):
+    prod3 = ProductionP3(prepare_graph_with_two_G3_and_two_squares)
+
+    expected_h_nodes_number = 8
+    h_nodes = [(v) for v,data in prepare_graph_with_two_G3_and_two_squares.nodes(data=True)
+               if data['label'] != 'Q' and data['h'] == 1]
+    assert len(h_nodes) == expected_h_nodes_number
+
+    prod3.apply()   
+    
+    expected_q_nodes_number = 2
+    q_nodes = [s for s in prepare_graph_with_two_G3_and_two_squares.nodes() if 'Q' in s]
+
+    assert len(q_nodes) == expected_q_nodes_number
+
+    expected_v_nodes_number = 21
+    assert len([s for s in prepare_graph_with_two_G3_and_two_squares.nodes() if 'v' in s]) == expected_v_nodes_number
