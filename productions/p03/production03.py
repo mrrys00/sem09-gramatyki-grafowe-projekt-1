@@ -27,7 +27,7 @@ class ProductionP3(Production):
                         if self.graph.nodes[n].get('h') == 1 and n != 'Q' and n not in hanging_nodes:
                             hanging_nodes.append(n)
 
-                if len(corner_nodes) == 4 and len(hanging_nodes) == 2:
+                if len(corner_nodes) == 4:
                     r = self.graph.nodes[node].get('R')
                     if r != None:
                         neighbors_edges_cnt = 0
@@ -39,6 +39,10 @@ class ProductionP3(Production):
         
         return None
 
+
+    def extract_coordinates(self, vertex):
+        _, x, y = vertex.split(':')  
+        return float(x), float(y) 
 
     def apply(self):
         """Apply P3 to divide the quadrilateral."""
@@ -52,6 +56,7 @@ class ProductionP3(Production):
                     subgraph_matrix[n1].append(n2)
                     subgraph_matrix[n2].append(n1)
             lone_vertices = list(filter(lambda n: len(subgraph_matrix[n]) == 1, subgraph_matrix.keys()))
+            lone_vertices = sorted(lone_vertices, key=self.extract_coordinates)
 
             mid_x1 = (self.subgraph.nodes[lone_vertices[0]]['x'] + self.subgraph.nodes[lone_vertices[1]]['x']) / 2
             mid_y1 = self.subgraph.nodes[lone_vertices[0]]['y'] 
@@ -61,14 +66,18 @@ class ProductionP3(Production):
             mid_y2 = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[1]]['y']) / 2
             hanging_node2 = f'v:{mid_x2}:{mid_y2}'
 
+            px = self.subgraph.nodes[lone_vertices[1]]['x']
+            py = self.subgraph.nodes[lone_vertices[0]]['y']
+            p = f'v:{px}:{py}'
+
             _b1 = self.graph.get_edge_data(lone_vertices[0], hanging_node1)['B']
-            self.subgraph.add_edge(lone_vertices[0], 'v:1.0:0.0', label='E', B=_b1)
-            self.graph.add_edge(lone_vertices[0], 'v:1.0:0.0')
+            self.subgraph.add_edge(lone_vertices[0], p, label='E', B=_b1)
+            self.graph.add_edge(lone_vertices[0], p)
 
             _b2 = self.graph.get_edge_data(lone_vertices[1], hanging_node2)['B']
-            self.subgraph.add_edge('v:1.0:0.0', lone_vertices[1], label='E', B=_b2)
-            self.graph.add_edge('v:1.0:0.0', lone_vertices[1])
-            
+            self.subgraph.add_edge(p, lone_vertices[1], label='E', B=_b2)
+            self.graph.add_edge(p, lone_vertices[1])
+
             # Remove the original node and its edges
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
