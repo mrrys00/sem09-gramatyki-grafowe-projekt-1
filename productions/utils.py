@@ -167,6 +167,7 @@ def prepare_valid_test_graph_for_prod_8_after_modification() -> nx.Graph:
 
     return G
 
+
 def prepare_valid_test_graph_with_hanging_node_p3() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
     G = nx.Graph()
@@ -223,7 +224,7 @@ def prepare_valid_test_graph_with_hanging_node_p4() -> nx.Graph:
 def prepare_valid_test_graph_for_prod_11_initial() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=1)
+    G.add_node('P', label='Q', R=1)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
@@ -249,25 +250,20 @@ def prepare_valid_test_graph_for_prod_11_initial() -> nx.Graph:
 
     return G
 
+
 def prepare_valid_test_graph_for_prod_11_big_1() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=1)
+    G.add_node('P', label='Q', R=1)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
-        ('v:0.0:-1.0', {'label': 'v', 'x': 0.0, 'y': -1.0, 'h': 0}),
-        ('v:-0.5:-0.5', {'label': 'v', 'x': -0.5, 'y': -0.5, 'h': 0}),
         ('v:1.0:-1.0', {'label': 'v', 'x': 1.0, 'y': -1.0, 'h': 0}),
-        ('v:1.0:-0.5', {'label': 'v', 'x': 1.0, 'y': -0.5, 'h': 0}),
         ('v:-1.0:-1.0', {'label': 'v', 'x': -1.0, 'y': -1.0, 'h': 1}),
-        ('v:-1.0:0.0', {'label': 'v', 'x': -1.0, 'y': 0.0, 'h': 1}),
 
         ('v:1.0:1.0', {'label': 'v', 'x': 1.0, 'y': 1.0, 'h': 0}),
         ('v:0.0:1.0', {'label': 'v', 'x': 0.0, 'y': 1.0, 'h': 0}),
-        ('v:-0.5:1.0', {'label': 'v', 'x': -0.5, 'y': 1.0, 'h': 0}),
         ('v:-1.0:1.0', {'label': 'v', 'x': -1.0, 'y': 1.0, 'h': 0}),
-
 
         ('v:1.5:0.5', {'label': 'v', 'x': 1.5, 'y': 0.5, 'h': 0}),
         ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 1}),
@@ -276,6 +272,7 @@ def prepare_valid_test_graph_for_prod_11_big_1() -> nx.Graph:
         ('v:0.0:2.0', {'label': 'v', 'x': 0.0, 'y': 2.0, 'h': 1}),
         ('Q1', {'label': 'Q', 'R': 0}),
         ('Q2', {'label': 'Q', 'R': 0}),
+        ('Q3', {'label': 'Q', 'R': 0}),
 
     ])
     G.add_edges_from([
@@ -288,59 +285,49 @@ def prepare_valid_test_graph_for_prod_11_big_1() -> nx.Graph:
         ('v:0.0:0.0', 'v:0.0:0.5', {'label': 'E', 'B': 1}),
         ('v:0.0:0.5', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
 
-        ('v:1.0:-0.5', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
-        ('v:1.0:-0.5', 'v:1.0:-1.0', {'label': 'E', 'B': 1}),
-        ('v:1.0:-1.0', 'v:0.0:-1.0', {'label': 'E', 'B': 1}),
-        ('v:-1.0:-1.0', 'v:0.0:-1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:-1.0', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:-1.0', 'v:-1.0:-1.0', {'label': 'E', 'B': 1}),
 
-        ('v:-1.0:-1.0', 'v:-0.5:-0.5', {'label': 'E', 'B': 1}),
-        ('v:0.0:0.0', 'v:-0.5:-0.5', {'label': 'E', 'B': 1}),
-        ('v:-1.0:-1.0', 'v:-1.0:0.0', {'label': 'E', 'B': 1}),
-        ('v:-1.0:0.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
-
-        ('v:-0.5:1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
-        ('v:-0.5:1.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:-1.0:-1.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:-1.0:-1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
 
         ('v:0.0:2.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
         ('v:0.0:2.0', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
 
         ('P', 'v:0.0:0.0'), ('P', 'v:1.0:0.0'), ('P', 'v:1.0:1.0'), ('P', 'v:0.0:1.0'),
         ('P', 'v:1.5:0.5'),
-        ('Q1', 'v:-0.5:-0.5'), ('Q1', 'v:0.5:0.0'), ('Q1', 'v:1.0:-0.5'), ('Q1', 'v:0.0:-1.0'),
-        ('Q2', 'v:-0.5:-0.5'), ('Q2', 'v:-1.0:0.0'), ('Q2', 'v:-0.5:1.0'), ('Q2', 'v:0.0:0.5'),
+        ('Q1', 'v:0.0:0.0'), ('Q1', 'v:1.0:0.0'), ('Q1', 'v:1.0:-1.0'), ('Q1', 'v:-1.0:-1.0'),
+        ('Q2', 'v:0.0:0.0'), ('Q2', 'v:-1.0:-1.0'), ('Q2', 'v:-1.0:1.0'), ('Q2', 'v:0.0:1.0'),
+        ('Q3', 'v:0.0:2.0'), ('Q3', 'v:1.0:1.0'), ('Q3', 'v:-1.0:1.0'), ('Q3', 'v:0.0:1.0'),
 
     ])
 
     return G
 
+
 def prepare_valid_test_graph_for_prod_11_big_2() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=1)
+    G.add_node('P', label='Q', R=1)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
-        ('v:0.0:-1.0', {'label': 'v', 'x': 0.0, 'y': -1.0, 'h': 0}),
-        ('v:-0.5:-0.5', {'label': 'v', 'x': -0.5, 'y': -0.5, 'h': 0}),
         ('v:1.0:-1.0', {'label': 'v', 'x': 1.0, 'y': -1.0, 'h': 0}),
-        ('v:1.0:-0.5', {'label': 'v', 'x': 1.0, 'y': -0.5, 'h': 0}),
         ('v:-1.0:-1.0', {'label': 'v', 'x': -1.0, 'y': -1.0, 'h': 1}),
 
         ('v:1.0:1.0', {'label': 'v', 'x': 1.0, 'y': 1.0, 'h': 0}),
         ('v:0.0:1.0', {'label': 'v', 'x': 0.0, 'y': 1.0, 'h': 0}),
-        ('v:-0.5:1.0', {'label': 'v', 'x': -0.5, 'y': 1.0, 'h': 0}),
         ('v:-1.0:1.0', {'label': 'v', 'x': -1.0, 'y': 1.0, 'h': 0}),
-
 
         ('v:1.5:0.5', {'label': 'v', 'x': 1.5, 'y': 0.5, 'h': 0}),
         ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 1}),
 
         ('v:0.0:2.0', {'label': 'v', 'x': 0.0, 'y': 2.0, 'h': 1}),
-        ('v:-0.5:1.5', {'label': 'v', 'x': -0.5, 'y': 1.5, 'h': 1}),
-        ('v:0.5:1.5', {'label': 'v', 'x': 0.5, 'y': 1.5, 'h': 1}),
         ('v:0.5:1.0', {'label': 'v', 'x': 0.5, 'y': 1.0, 'h': 1}),
         ('Q1', {'label': 'Q', 'R': 0}),
         ('Q2', {'label': 'Q', 'R': 0}),
+        ('Q3', {'label': 'Q', 'R': 0}),
 
     ])
     G.add_edges_from([
@@ -354,27 +341,89 @@ def prepare_valid_test_graph_for_prod_11_big_2() -> nx.Graph:
         ('v:1.0:0.0', 'v:0.5:0.0', {'label': 'E', 'B': 1}),
         ('v:0.0:0.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
 
-        ('v:1.0:-0.5', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
-        ('v:1.0:-0.5', 'v:1.0:-1.0', {'label': 'E', 'B': 1}),
-        ('v:1.0:-1.0', 'v:0.0:-1.0', {'label': 'E', 'B': 1}),
-        ('v:-1.0:-1.0', 'v:0.0:-1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:-1.0', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:-1.0', 'v:-1.0:-1.0', {'label': 'E', 'B': 1}),
+
+        ('v:-1.0:-1.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:-1.0:-1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:2.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
+
+        ('v:0.0:1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
+
+        ('v:0.0:2.0', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+
+        ('P', 'v:0.0:0.0'), ('P', 'v:1.0:0.0'), ('P', 'v:1.0:1.0'), ('P', 'v:0.0:1.0'),
+        ('P', 'v:1.5:0.5'),
+        ('Q1', 'v:0.0:0.0'), ('Q1', 'v:1.0:0.0'), ('Q1', 'v:1.0:-1.0'), ('Q1', 'v:-1.0:-1.0'),
+        ('Q2', 'v:-1.0:-1.0'), ('Q2', 'v:-1.0:1.0'), ('Q2', 'v:0.0:0.0'), ('Q2', 'v:0.0:1.0'),
+        ('Q3', 'v:0.0:2.0'), ('Q3', 'v:-1.0:1.0'), ('Q3', 'v:1.0:1.0'), ('Q3', 'v:0.0:1.0'),
+
+    ])
+
+    return G
+
+
+def prepare_valid_test_graph_for_prod_11_big_3() -> nx.Graph:
+    """Prepares the basic 4-nodes and one Q-node graph"""
+    G = nx.Graph()
+    G.add_node('P', label='Q', R=1)
+    G.add_nodes_from([
+        ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
+        ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
+        ('v:-0.5:-0.5', {'label': 'v', 'x': -0.5, 'y': -0.5, 'h': 0}),
+        ('v:1.0:-1.0', {'label': 'v', 'x': 1.0, 'y': -1.0, 'h': 0}),
+        ('v:-1.0:-1.0', {'label': 'v', 'x': -1.0, 'y': -1.0, 'h': 1}),
+
+        ('v:1.0:1.0', {'label': 'v', 'x': 1.0, 'y': 1.0, 'h': 0}),
+        ('v:0.0:1.0', {'label': 'v', 'x': 0.0, 'y': 1.0, 'h': 0}),
+        ('v:-0.5:1.0', {'label': 'v', 'x': -0.5, 'y': 1.0, 'h': 0}),
+        ('v:-1.0:1.0', {'label': 'v', 'x': -1.0, 'y': 1.0, 'h': 0}),
+
+        ('v:1.5:0.5', {'label': 'v', 'x': 1.5, 'y': 0.5, 'h': 0}),
+        ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 1}),
+
+        ('v:0.0:2.0', {'label': 'v', 'x': 0.0, 'y': 2.0, 'h': 1}),
+        ('v:1.0:2.0', {'label': 'v', 'x': 1.0, 'y': 2.0, 'h': 1}),
+        ('v:0.5:1.0', {'label': 'v', 'x': 0.5, 'y': 1.0, 'h': 1}),
+        ('Q1', {'label': 'Q', 'R': 0}),
+        ('Q2', {'label': 'Q', 'R': 0}),
+        ('Q3', {'label': 'Q', 'R': 1}),
+        ('Q4', {'label': 'Q', 'R': 1}),
+
+    ])
+    G.add_edges_from([
+        ('v:0.5:1.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:1.0', 'v:0.5:1.0', {'label': 'E', 'B': 1}),
+
+        ('v:1.0:0.0', 'v:1.5:0.5', {'label': 'E', 'B': 1}),
+        ('v:1.5:0.5', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+
+        ('v:0.5:0.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:0.0', 'v:0.5:0.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:0.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
+
+        ('v:1.0:-1.0', 'v:1.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:-1.0', 'v:-1.0:-1.0', {'label': 'E', 'B': 1}),
 
         ('v:-1.0:-1.0', 'v:-0.5:-0.5', {'label': 'E', 'B': 1}),
         ('v:0.0:0.0', 'v:-0.5:-0.5', {'label': 'E', 'B': 1}),
         ('v:-1.0:-1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
-        ('v:-0.5:1.5', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
-        ('v:-0.5:1.5', 'v:0.0:2.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:2.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
 
         ('v:-0.5:1.0', 'v:-1.0:1.0', {'label': 'E', 'B': 1}),
         ('v:-0.5:1.0', 'v:0.0:1.0', {'label': 'E', 'B': 1}),
 
-        ('v:0.0:2.0', 'v:0.5:1.5', {'label': 'E', 'B': 1}),
-        ('v:0.5:1.5', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:2.0', 'v:1.0:2.0', {'label': 'E', 'B': 1}),
+        ('v:1.0:2.0', 'v:1.0:1.0', {'label': 'E', 'B': 1}),
+        ('v:-0.5:1.0', 'v:-0.5:-0.5', {'label': 'E', 'B': 1}),
 
         ('P', 'v:0.0:0.0'), ('P', 'v:1.0:0.0'), ('P', 'v:1.0:1.0'), ('P', 'v:0.0:1.0'),
         ('P', 'v:1.5:0.5'),
-        ('Q1', 'v:-0.5:-0.5'), ('Q1', 'v:0.5:0.0'), ('Q1', 'v:1.0:-0.5'), ('Q1', 'v:0.0:-1.0'),
-        ('Q2', 'v:0.5:1.5'), ('Q2', 'v:-0.5:1.5'), ('Q2', 'v:-0.5:1.0'), ('Q2', 'v:0.5:1.0'),
+        ('Q1', 'v:0.0:0.0'), ('Q1', 'v:1.0:0.0'), ('Q1', 'v:1.0:-1.0'), ('Q1', 'v:-1.0:-1.0'),
+        ('Q2', 'v:-1.0:1.0'), ('Q2', 'v:0.0:2.0'), ('Q2', 'v:1.0:1.0'), ('Q2', 'v:0.0:1.0'),
+        ('Q2', 'v:1.0:2.0'),
+        ('Q3', 'v:-0.5:-0.5'), ('Q3', 'v:-0.5:1.0'), ('Q3', 'v:0.0:1.0'), ('Q3', 'v:0.0:0.0'),
+        ('Q4', 'v:-0.5:-0.5'), ('Q4', 'v:-0.5:1.0'), ('Q4', 'v:-1.0:-1.0'), ('Q4', 'v:-1.0:1.0'),
 
     ])
 
@@ -433,11 +482,10 @@ def prepare_valid_test_graph_for_prod_11_after_modification() -> nx.Graph:
     return G
 
 
-
 def prepare_non_valid_test_graph_for_prod_11_initial() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=1)
+    G.add_node('P', label='Q', R=1)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:1.0:0.0', {'label': 'v', 'x': 1.0, 'y': 0.0, 'h': 0}),
@@ -463,6 +511,7 @@ def prepare_non_valid_test_graph_for_prod_11_initial() -> nx.Graph:
 
     return G
 
+
 def prepare_graph_with_R0_quadrilateral() -> nx.Graph:
     """Prepares a graph with a quadrilateral element where R == 0."""
     G = nx.Graph()
@@ -486,6 +535,7 @@ def prepare_graph_with_R0_quadrilateral() -> nx.Graph:
         ('v3', 'v0')
     ])
     return G
+
 
 def prepare_graph_without_R0_quadrilateral() -> nx.Graph:
     """Prepares a graph where no quadrilateral elements have R == 0."""
@@ -515,7 +565,7 @@ def prepare_graph_without_R0_quadrilateral() -> nx.Graph:
 def prepare_valid_test_graph_for_prod_17_initial() -> nx.Graph:
     """Prepares the basic 4-nodes and one P-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=0)
+    G.add_node('P', label='Q', R=0)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 0}),
@@ -540,7 +590,7 @@ def prepare_valid_test_graph_for_prod_17_initial() -> nx.Graph:
 def prepare_non_valid_test_graph_for_prod_17_initial() -> nx.Graph:
     """Prepares the basic 4-nodes and one P-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=0)
+    G.add_node('P', label='Q', R=0)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 0}),
@@ -565,7 +615,7 @@ def prepare_non_valid_test_graph_for_prod_17_initial() -> nx.Graph:
 def prepare_valid_test_graph_for_prod_17_after_modification() -> nx.Graph:
     """Prepares the basic 4-nodes and one P-node graph"""
     G = nx.Graph()
-    G.add_node('P', label='P', R=1)
+    G.add_node('P', label='Q', R=1)
     G.add_nodes_from([
         ('v:0.0:0.0', {'label': 'v', 'x': 0.0, 'y': 0.0, 'h': 0}),
         ('v:0.5:0.0', {'label': 'v', 'x': 0.5, 'y': 0.0, 'h': 0}),
@@ -585,7 +635,6 @@ def prepare_valid_test_graph_for_prod_17_after_modification() -> nx.Graph:
     ])
 
     return G
-
 
 
 def prepare_corrupted_test_graph() -> nx.Graph:

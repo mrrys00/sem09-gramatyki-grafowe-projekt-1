@@ -38,7 +38,7 @@ class ProductionP11(Production):
             ]
 
         for node, data in self.graph.nodes(data=True):
-            if data.get('label') != 'P' or data.get('R') != 1:
+            if data.get('label') != 'Q' or data.get('R') != 1:
                 continue
 
             neighbors = list(self.graph.neighbors(node))

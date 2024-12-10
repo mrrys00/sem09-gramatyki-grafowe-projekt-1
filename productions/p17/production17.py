@@ -17,7 +17,7 @@ class ProductionP17(Production):
             """Helper to check neighbor conditions and extract the subgraph."""
             for neighbor in primary_neighbors:
                 neighbor_data = self.graph.nodes[neighbor]
-                if neighbor_data.get('label') == 'P' and neighbor_data.get('R') == 0:
+                if neighbor_data.get('label') == 'Q' and neighbor_data.get('R') == 0:
                     neighbor_subgraph_nodes = list(self.graph.neighbors(neighbor))
                     for secondary in secondary_neighbors:
                         if secondary != excluded_neighbor and secondary in self.graph.neighbors(neighbor):
