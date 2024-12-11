@@ -21,11 +21,6 @@ class ProductionP3(Production):
                 neighbors = list(self.graph.neighbors(node))
                 
                 corner_nodes = [n for n in neighbors if self.graph.nodes[n].get('h') == 0]
-                hanging_nodes = []
-                for neighbor in neighbors:
-                    for n in self.graph.neighbors(neighbor):
-                        if self.graph.nodes[n].get('h') == 1 and n != 'Q' and n not in hanging_nodes:
-                            hanging_nodes.append(n)
 
                 if len(corner_nodes) == 4:
                     r = self.graph.nodes[node].get('R')
