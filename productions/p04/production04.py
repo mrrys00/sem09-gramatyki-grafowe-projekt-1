@@ -11,6 +11,10 @@ class ProductionP4(Production):
     Divides a quadrilateral with 2 hanging nodes into smaller quadrilaterals
     """
 
+    def __init__(self, graph):
+        super().__init__(graph)
+        self.hanging_nodes = [] 
+
     @property
     def check(self):
         """
@@ -21,25 +25,26 @@ class ProductionP4(Production):
                 neighbors = list(self.graph.neighbors(node))
                 
                 corner_nodes = [n for n in neighbors if self.graph.nodes[n].get('h') == 0]
-                hanging_nodes = []
-                for neighbor in neighbors:
-                    for n in self.graph.neighbors(neighbor):
-                        if self.graph.nodes[n].get('h') == 1 and n != 'Q' and n not in hanging_nodes:
-                            hanging_nodes.append(n)
-                            
-                if len(corner_nodes) == 4 and len(hanging_nodes) == 2:
+
+                self.hanging_nodes = []
+                for (n1, n2) in combinations(corner_nodes, 2):
+                    for n in nx.common_neighbors(self.graph, n1, n2):
+                        if self.graph.nodes[n].get('h') == 1 and n[0] != 'Q' and n not in self.hanging_nodes and n not in corner_nodes:
+                            self.hanging_nodes.append(n)
+
+                self.hanging_nodes.sort() 
+
+                if len(corner_nodes) == 4 and len(self.hanging_nodes) == 2:
                     r = self.graph.nodes[node].get('R')
                     if r != None:
                         neighbors_edges_cnt = 0
                         for (n1, n2) in combinations(neighbors, 2):
                             if self.graph.has_edge(n1, n2):
                                 neighbors_edges_cnt += 1
-                        print(neighbors_edges_cnt)
                         if neighbors_edges_cnt == 2:
                             return self._extract_subgraph(node, neighbors)
         
         return None
-
 
     def apply(self):
         """Apply P4 to divide the quadrilateral."""
@@ -47,28 +52,19 @@ class ProductionP4(Production):
         if result:
             q_node, neighbors = result
 
-            subgraph_matrix = {node: [] for node in neighbors}
-            for (n1, n2) in combinations(neighbors, 2):
-                if self.subgraph.get_edge_data(n1, n2):
-                    subgraph_matrix[n1].append(n2)
-                    subgraph_matrix[n2].append(n1)
-            lone_vertices = list(filter(lambda n: len(subgraph_matrix[n]) == 1, subgraph_matrix.keys()))
+            hanging_node1 = self.hanging_nodes[0]
+            hanging_node2 = self.hanging_nodes[1]
 
-            mid_x1 = self.subgraph.nodes[lone_vertices[0]]['x'] 
-            mid_y1 = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[2]]['y']) / 2
-            hanging_node1 = f'v:{mid_x1}:{mid_y1}'
+            verticles_for_hn1 = [n for n in neighbors if self.graph.get_edge_data(n, hanging_node1)]
+            verticles_for_hn2 = [n for n in neighbors if self.graph.get_edge_data(n, hanging_node2)]
 
-            mid_x2 = self.subgraph.nodes[lone_vertices[1]]['x'] 
-            mid_y2 = (self.subgraph.nodes[lone_vertices[0]]['y'] + self.subgraph.nodes[lone_vertices[2]]['y']) / 2
-            hanging_node2 = f'v:{mid_x2}:{mid_y2}'
+            _b1 = self.graph.get_edge_data(verticles_for_hn1[0], hanging_node1)['B']
+            self.subgraph.add_edge(verticles_for_hn1[0], verticles_for_hn1[1], label='E', B=_b1)
+            self.graph.add_edge(verticles_for_hn1[0], verticles_for_hn1[1])
 
-            _b1 = self.graph.get_edge_data(lone_vertices[0], hanging_node1)['B']
-            self.subgraph.add_edge(lone_vertices[0], lone_vertices[3], label='E', B=_b1)
-            self.graph.add_edge(lone_vertices[0], lone_vertices[3])
-
-            _b2 = self.graph.get_edge_data(lone_vertices[1], hanging_node2)['B']
-            self.subgraph.add_edge(lone_vertices[1], lone_vertices[2], label='E', B=_b2)
-            self.graph.add_edge(lone_vertices[1], lone_vertices[2])
+            _b2 = self.graph.get_edge_data(verticles_for_hn2[1], hanging_node2)['B']
+            self.subgraph.add_edge(verticles_for_hn2[0], verticles_for_hn2[1], label='E', B=_b2)
+            self.graph.add_edge(verticles_for_hn2[0], verticles_for_hn2[1])
             
             # Remove the original node and its edges
             self.subgraph.remove_node(q_node)
