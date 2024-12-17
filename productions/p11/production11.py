@@ -77,7 +77,7 @@ class ProductionP11(Production):
                 if data:
                     if n1 in neighbors and n2 in neighbors:
                         midpoint = self._create_midpoint(midpoints, n1, n2)
-                        self.subgraph.nodes[midpoint]['h'] = -data['B']
+                        self.subgraph.nodes[midpoint]['h'] = 1 - data['B']
 
             self._fill_graph(neighbors, midpoints)
 
@@ -86,7 +86,7 @@ class ProductionP11(Production):
             center_node = f'v:{x}:{y}'
 
             for n3 in list(midpoints) + not_neighbors:
-                self.subgraph.add_edge(n3, center_node, label='E', B=1)
+                self.subgraph.add_edge(n3, center_node, label='E', B=0)
 
             # Replace subgraph in graph
             self.graph.update(self.subgraph)
