@@ -1,6 +1,6 @@
 """
 Group 1
-Project part 2
+Project 1 part 2
 """
 
 import networkx as nx
@@ -19,6 +19,8 @@ from productions.p16.production16 import ProductionP16
 
 from productions.utils import visualize_graph
 
+VISUALIZE_ALL = True
+
 def init_2_graph() -> nx.Graph:
     G = nx.Graph()
     G.add_nodes_from([
@@ -27,101 +29,111 @@ def init_2_graph() -> nx.Graph:
         ('v:10.0:5.0', {'label': 'v', 'x': 10.0, 'y': 5.0, 'h': 0}),
         ('v:10.0:10.0', {'label': 'v', 'x': 10.0, 'y': 10.0, 'h': 0}),
         ('v:0.0:10.0', {'label': 'v', 'x': 0.0, 'y': 10.0, 'h': 0}),
-        ('v:0.0:5.0', {'label': 'v', 'x': 0.0, 'y': 5.0, 'h': 0}),
         
         ('v:3.0:2.0', {'label': 'v', 'x': 3.0, 'y': 2.0, 'h': 0}),
         ('v:7.0:2.0', {'label': 'v', 'x': 7.0, 'y': 2.0, 'h': 0}),
-        ('v:2.0:5.0', {'label': 'v', 'x': 2.0, 'y': 5.0, 'h': 0}),
         ('v:8.0:5.0', {'label': 'v', 'x': 8.0, 'y': 5.0, 'h': 0}),
         ('v:3.0:8.0', {'label': 'v', 'x': 3.0, 'y': 8.0, 'h': 0}),
         ('v:7.0:8.0', {'label': 'v', 'x': 7.0, 'y': 8.0, 'h': 0}),
 
-        # ('Q:5.0:5.0', {'label': 'Q', 'R': 1}),
+        ('P:5.0:5.0', {'label': 'P', 'R': 0}),
+
+        ('Q:5.0:1.0', {'label': 'Q', 'R': 0}),
+        ('Q:9.0:3.0', {'label': 'Q', 'R': 0}),
+        ('Q:9.0:8.0', {'label': 'Q', 'R': 0}),
+        ('Q:5.0:9.0', {'label': 'Q', 'R': 0}),
+        ('Q:2.0:5.0', {'label': 'Q', 'R': 0}),
     ])
     G.add_edges_from([
         ('v:0.0:0.0', 'v:10.0:0.0', {'label': 'E', 'B': 1}),
         ('v:10.0:0.0', 'v:10.0:5.0', {'label': 'E', 'B': 1}),
         ('v:10.0:5.0', 'v:10.0:10.0', {'label': 'E', 'B': 1}),
         ('v:10.0:10.0', 'v:0.0:10.0', {'label': 'E', 'B': 1}),
-        ('v:0.0:10.0', 'v:0.0:5.0', {'label': 'E', 'B': 1}),
-        ('v:0.0:5.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
+        ('v:0.0:10.0', 'v:0.0:0.0', {'label': 'E', 'B': 1}),
         
         ('v:0.0:0.0', 'v:3.0:2.0', {'label': 'E', 'B': 0}),
         ('v:10.0:0.0', 'v:7.0:2.0', {'label': 'E', 'B': 0}),
         ('v:10.0:5.0', 'v:8.0:5.0', {'label': 'E', 'B': 0}),
         ('v:10.0:10.0', 'v:7.0:8.0', {'label': 'E', 'B': 0}),
         ('v:0.0:10.0', 'v:3.0:8.0', {'label': 'E', 'B': 0}),
-        ('v:0.0:5.0', 'v:2.0:5.0', {'label': 'E', 'B': 0}),
 
         ('v:3.0:2.0', 'v:7.0:2.0', {'label': 'E', 'B': 0}),
         ('v:7.0:2.0', 'v:8.0:5.0', {'label': 'E', 'B': 0}),
         ('v:8.0:5.0', 'v:7.0:8.0', {'label': 'E', 'B': 0}),
         ('v:7.0:8.0', 'v:3.0:8.0', {'label': 'E', 'B': 0}),
-        ('v:3.0:8.0', 'v:2.0:5.0', {'label': 'E', 'B': 0}),
-        ('v:2.0:5.0', 'v:3.0:2.0', {'label': 'E', 'B': 0}),
+        ('v:3.0:8.0', 'v:3.0:2.0', {'label': 'E', 'B': 0}),
         
-        # ('v:3.0:2.0', 'Q:5.0:5.0'),
-        # ('v:7.0:2.0', 'Q:5.0:5.0'),
-        # ('v:8.0:5.0', 'Q:5.0:5.0'),
-        # ('v:7.0:8.0', 'Q:5.0:5.0'),
-        # ('v:3.0:8.0', 'Q:5.0:5.0'),
-        # ('v:2.0:5.0', 'Q:5.0:5.0'),
+        # for ('P:5.0:5.0', {'label': 'P', 'R': 0}),
+        ('v:3.0:2.0', 'P:5.0:5.0'),
+        ('v:7.0:2.0', 'P:5.0:5.0'),
+        ('v:8.0:5.0', 'P:5.0:5.0'),
+        ('v:7.0:8.0', 'P:5.0:5.0'),
+        ('v:3.0:8.0', 'P:5.0:5.0'),
+        
+        # for ('Q:5.0:1.0', {'label': 'Q', 'R': 0}),
+        ('v:0.0:0.0', 'Q:5.0:1.0'),
+        ('v:10.0:0.0', 'Q:5.0:1.0'),
+        ('v:7.0:2.0', 'Q:5.0:1.0'),
+        ('v:3.0:2.0', 'Q:5.0:1.0'),
+
+        # for ('Q:9.0:3.0', {'label': 'Q', 'R': 0}),
+        ('v:7.0:2.0', 'Q:9.0:3.0'),
+        ('v:10.0:0.0', 'Q:9.0:3.0'),
+        ('v:10.0:5.0', 'Q:9.0:3.0'),
+        ('v:8.0:5.0', 'Q:9.0:3.0'),
+
+        # for ('Q:9.0:8.0', {'label': 'Q', 'R': 0}),
+        ('v:8.0:5.0', 'Q:9.0:8.0'),
+        ('v:10.0:5.0', 'Q:9.0:8.0'),
+        ('v:10.0:10.0', 'Q:9.0:8.0'),
+        ('v:7.0:8.0', 'Q:9.0:8.0'),
+
+        # for ('Q:5.0:9.0', {'label': 'Q', 'R': 0}),
+        ('v:3.0:8.0', 'Q:5.0:9.0'),
+        ('v:7.0:8.0', 'Q:5.0:9.0'),
+        ('v:10.0:10.0', 'Q:5.0:9.0'),
+        ('v:0.0:10.0', 'Q:5.0:9.0'),
+
+        # for ('Q:2.0:5.0', {'label': 'Q', 'R': 0}),
+        ('v:0.0:0.0', 'Q:2.0:5.0'),
+        ('v:3.0:2.0', 'Q:2.0:5.0'),
+        ('v:3.0:8.0', 'Q:2.0:5.0'),
+        ('v:0.0:10.0', 'Q:2.0:5.0'),
     ])
     
     return G
 
 
 prod_queue = [
-    [ProductionP2, ProductionP1],
+    
+    [ProductionP16],
     [ProductionP9],
     [ProductionP7],
     [ProductionP8,ProductionP8],
-    [ProductionP8,ProductionP8],
-    [ProductionP2,ProductionP3],
+    [ProductionP2],
+    [ProductionP3],
     [ProductionP1],
     [ProductionP7],
     [ProductionP8,ProductionP8],
-    [ProductionP2,ProductionP3],
-    [ProductionP1]
+    [ProductionP2],
+    [ProductionP3],
+    [ProductionP1],
 ]
 
 def run_prod_chain(G: nx.Graph, prod_queue: list[list]=prod_queue) -> nx.Graph:
 
     for p_tuple in prod_queue:
-        # print(type(p_tuple), p_tuple)
         for p in p_tuple:
-            # print(type(p), p)
-            p_obj = p(G)
-            p_obj.apply()
-        # print("OK")
-        visualize_graph(G)
+            prod_name = f"{p.__name__} applied"
+            p(G).apply()
+            print(prod_name)
+        if VISUALIZE_ALL: visualize_graph(G, title=prod_name)
 
     return G
 
-def temp_do_all_productions(G: nx.Graph):
-    
-    for p in [
-        ProductionP1,
-        ProductionP2,
-        ProductionP3,
-        ProductionP4,
-        ProductionP7,
-        ProductionP8,
-        ProductionP9,
-        ProductionP10,
-        ProductionP11,
-        ProductionP16
-    ]:
-        p_obj = p(G)
-        p_obj.apply()
-        print(p)
-        # visualize_graph(G)
 
 if __name__ == '__main__':
     G = init_2_graph()
     visualize_graph(G)
     G = run_prod_chain(G=G)
-    # TODO need to brilliant idea what to do …
-    # G = temp_do_all_productions(G)
-    visualize_graph(G)
     print("works")
