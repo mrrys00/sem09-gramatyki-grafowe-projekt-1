@@ -32,9 +32,7 @@ class ProductionP7(Production):
         Apply P7 to mark the quadrilateral for splitting.
         """
         candidate_nodes = list(self.graph.nodes(data=True))
-        print(candidate_nodes)
         candidate_nodes.sort(key=lambda x: sqrt((float(x[0].split(':')[1]) - reference_node['x'])**2 + (float(x[0].split(':')[2]) - reference_node['y'])**2))
-        print(candidate_nodes)
 
         for node, data in candidate_nodes:
             if data.get('label') == 'Q' and data.get('R') == 0:
