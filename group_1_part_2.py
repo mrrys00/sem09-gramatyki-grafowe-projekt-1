@@ -4,6 +4,7 @@ Project 1 part 2
 """
 
 import networkx as nx
+import os
 
 from productions.p01.production01 import ProductionP1
 from productions.p02.production02 import ProductionP2
@@ -13,9 +14,14 @@ from productions.p08.production08 import ProductionP8
 from productions.p09.production09 import ProductionP9
 from productions.p16.production16 import ProductionP16
 
-from productions.utils import visualize_graph
+from productions.utils import visualize_graph, convert_code_to_pdf
 
-VISUALIZE_ALL = True
+OUTPUT_DIR = "./results/"
+
+
+def prepare_output_directory(p: str = OUTPUT_DIR):
+    if not os.path.exists(p):
+        os.makedirs(p)
 
 def init_2_graph() -> nx.Graph:
     G = nx.Graph()
@@ -100,19 +106,25 @@ def init_2_graph() -> nx.Graph:
     return G
 
 def run_prod_queue(G: nx.Graph, prod_queue: list, reference_node: dict, iterations: int) -> nx.Graph:
-    visualize_graph(G)
+    iter = 0
+    m = lambda x: '0' * (3-len(str(x))) + str(x)
+    visualize_graph(G, title=f"{m(iter)} Initial graph", img_path=OUTPUT_DIR)
+    iter += 1
 
     if ProductionP16(G).apply_with_reference_node(reference_node):
         print("ProductionP16 applied")
-        visualize_graph(G, title="ProductionP16 applied")
+        visualize_graph(G, title=f"{m(iter)} ProductionP16 applied", img_path=OUTPUT_DIR)
+        iter += 1
         if ProductionP9(G).apply_with_reference_node(reference_node):
             print("ProductionP9 applied")
-            visualize_graph(G, title="ProductionP9 applied")
+            visualize_graph(G, title=f"{m(iter)} ProductionP9 applied", img_path=OUTPUT_DIR)
+            iter += 1
 
     for _ in range(iterations):
         ProductionP7(G).apply_with_reference_node(reference_node)
         print("ProductionP7 applied")
-        visualize_graph(G, title="ProductionP7 applied")
+        visualize_graph(G, title=f"{m(iter)} ProductionP7 applied", img_path=OUTPUT_DIR)
+        iter += 1
 
         for p in prod_queue:
             applied = False
@@ -121,12 +133,15 @@ def run_prod_queue(G: nx.Graph, prod_queue: list, reference_node: dict, iteratio
 
             if applied:
                 print(f"{p.__name__} applied")
-                visualize_graph(G, title=f"{p.__name__} applied")
+                visualize_graph(G, title=f"{m(iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
+                iter += 1
 
     return G
 
 
 if __name__ == '__main__':
+    prepare_output_directory()
+
     G = init_2_graph()
     prod_queue = [
         ProductionP8,
@@ -138,4 +153,3 @@ if __name__ == '__main__':
     iterations = 2
 
     run_prod_queue(G, prod_queue, reference_node, iterations)
-    print("works")

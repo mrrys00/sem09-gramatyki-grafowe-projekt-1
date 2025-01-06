@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from statistics import fmean
 
 
-def visualize_graph(graph: nx.Graph, title: str = "Graph Visualization"):
-    """Visualize the graph."""
+def visualize_graph(graph: nx.Graph, title: str = "Graph Visualization", img_path: str = ""):
+    """Visualize the graph. Optionaly save the figure"""
     multiedges_labels = ["Q", "P"]  # TODO might need to extend this list
     colors = [
         "lightblue" if data.get("label") in multiedges_labels else "lightgreen"
@@ -36,7 +36,7 @@ def visualize_graph(graph: nx.Graph, title: str = "Graph Visualization"):
         else:
             positions[point] = (data.get("x"), data.get("y"))
 
-    plt.figure(figsize=(20, 20))
+    plt.figure(figsize=(64, 36))
     nx.draw(
         graph,
         pos=positions,
@@ -49,8 +49,10 @@ def visualize_graph(graph: nx.Graph, title: str = "Graph Visualization"):
         graph, pos=positions, edge_labels=edge_labels, font_size=12
     )
     plt.title(title)
-    plt.show()
-
+    if img_path != "":
+        plt.savefig(f"{img_path}{title.lower().replace(' ', '-')}.png")
+    else:
+        plt.show()
 
 def prepare_valid_test_graph() -> nx.Graph:
     """Prepares the basic 4-nodes and one Q-node graph"""
