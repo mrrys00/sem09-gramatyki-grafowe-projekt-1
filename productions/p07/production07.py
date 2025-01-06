@@ -1,4 +1,5 @@
 from ..production import Production
+from math import sqrt
 
 class ProductionP7(Production):
     """
@@ -23,3 +24,19 @@ class ProductionP7(Production):
         q_node = self.check
         if q_node is not None:
             self.graph.nodes[q_node]['R'] = 1
+            return True
+        return False
+
+    def apply_with_reference_node(self, reference_node):
+        """
+        Apply P7 to mark the quadrilateral for splitting.
+        """
+        candidate_nodes = list(self.graph.nodes(data=True))
+        candidate_nodes.sort(key=lambda x: sqrt((float(x[0].split(':')[1]) - reference_node['x'])**2 + (float(x[0].split(':')[2]) - reference_node['y'])**2))
+
+        for node, data in candidate_nodes:
+            if data.get('label') == 'Q' and data.get('R') == 0:
+                self.graph.nodes[node]['R'] = 1
+                return True
+
+        return False

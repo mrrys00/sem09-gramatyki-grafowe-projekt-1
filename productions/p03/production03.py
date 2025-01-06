@@ -81,3 +81,5 @@ class ProductionP3(Production):
 
             # Replace subgraph in graph
             self.graph.update(self.subgraph)
+            return True
+        return False
