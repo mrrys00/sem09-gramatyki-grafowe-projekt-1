@@ -5,16 +5,12 @@ Project 1 part 2
 
 import networkx as nx
 
-from productions.production import Production
 from productions.p01.production01 import ProductionP1
 from productions.p02.production02 import ProductionP2
 from productions.p03.production03 import ProductionP3
-from productions.p04.production04 import ProductionP4
 from productions.p07.production07 import ProductionP7
 from productions.p08.production08 import ProductionP8
 from productions.p09.production09 import ProductionP9
-from productions.p10.production10 import ProductionP10
-from productions.p11.production11 import ProductionP11
 from productions.p16.production16 import ProductionP16
 
 from productions.utils import visualize_graph
@@ -103,37 +99,43 @@ def init_2_graph() -> nx.Graph:
     
     return G
 
+def run_prod_queue(G: nx.Graph, prod_queue: list, reference_node: dict, iterations: int) -> nx.Graph:
+    visualize_graph(G)
 
-prod_queue = [
-    
-    [ProductionP16],
-    [ProductionP9],
-    [ProductionP7],
-    [ProductionP8,ProductionP8],
-    [ProductionP2],
-    [ProductionP3],
-    [ProductionP1],
-    [ProductionP7],
-    [ProductionP8,ProductionP8],
-    [ProductionP2],
-    [ProductionP3],
-    [ProductionP1],
-]
+    if ProductionP16(G).apply_with_reference_node(reference_node):
+        print("ProductionP16 applied")
+        visualize_graph(G, title="ProductionP16 applied")
+        if ProductionP9(G).apply_with_reference_node(reference_node):
+            print("ProductionP9 applied")
+            visualize_graph(G, title="ProductionP9 applied")
 
-def run_prod_chain(G: nx.Graph, prod_queue: list[list]=prod_queue) -> nx.Graph:
+    for _ in range(iterations):
+        ProductionP7(G).apply_with_reference_node(reference_node)
+        print("ProductionP7 applied")
+        visualize_graph(G, title="ProductionP7 applied")
 
-    for p_tuple in prod_queue:
-        for p in p_tuple:
-            prod_name = f"{p.__name__} applied"
-            p(G).apply()
-            print(prod_name)
-        if VISUALIZE_ALL: visualize_graph(G, title=prod_name)
+        for p in prod_queue:
+            applied = False
+            while p(G).apply_with_reference_node(reference_node):
+                applied = True
+
+            if applied:
+                print(f"{p.__name__} applied")
+                visualize_graph(G, title=f"{p.__name__} applied")
 
     return G
 
 
 if __name__ == '__main__':
     G = init_2_graph()
-    visualize_graph(G)
-    G = run_prod_chain(G=G)
+    prod_queue = [
+        ProductionP8,
+        ProductionP2,
+        ProductionP3,
+        ProductionP1
+    ]
+    reference_node = {"x": 7.5, "y": 5.0}
+    iterations = 2
+
+    run_prod_queue(G, prod_queue, reference_node, iterations)
     print("works")
