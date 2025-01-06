@@ -59,3 +59,5 @@ class ProductionP17(Production):
             # Update the subgraph
             self.subgraph.nodes[q_node]['R'] = 1
             self.graph.update(self.subgraph)
+            return True
+        return False

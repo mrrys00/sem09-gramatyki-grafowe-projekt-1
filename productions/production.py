@@ -16,7 +16,7 @@ class Production(ABC):
         pass
 
     @abstractmethod
-    def apply(self):
+    def apply(self) -> bool:
         """Apply the production to modify the graph."""
         pass
 

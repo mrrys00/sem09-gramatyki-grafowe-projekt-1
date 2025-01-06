@@ -23,3 +23,5 @@ class ProductionP7(Production):
         q_node = self.check
         if q_node is not None:
             self.graph.nodes[q_node]['R'] = 1
+            return True
+        return False

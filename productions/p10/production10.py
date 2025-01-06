@@ -38,22 +38,24 @@ class ProductionP10(Production):
             self.subgraph.remove_node(q_node)
             self.graph.remove_node(q_node)
 
-        # Create new nodes and edges for the divided structure
-        midpoints = {}
-        for (n1, n2) in combinations(nodes, 2):
-            # existing edges
-            if self.subgraph.get_edge_data(n1, n2):
-                self._create_midpoint(midpoints, n1, n2)
-            # artificially add edge to hanging node
-            elif self.subgraph.degree(n1) == 1 and self.subgraph.degree(n2) == 1:
-                self.subgraph.add_edge(n1, n2, label='E', B=1)
-                self.graph.add_edge(n1, n2)
-                _ = self._create_midpoint(midpoints, n1, n2)
+            # Create new nodes and edges for the divided structure
+            midpoints = {}
+            for (n1, n2) in combinations(nodes, 2):
+                # existing edges
+                if self.subgraph.get_edge_data(n1, n2):
+                    self._create_midpoint(midpoints, n1, n2)
+                # artificially add edge to hanging node
+                elif self.subgraph.degree(n1) == 1 and self.subgraph.degree(n2) == 1:
+                    self.subgraph.add_edge(n1, n2, label='E', B=1)
+                    self.graph.add_edge(n1, n2)
+                    _ = self._create_midpoint(midpoints, n1, n2)
 
-        self._fill_graph(nodes, midpoints)
+            self._fill_graph(nodes, midpoints)
 
-        # Replace subgraph in graph
-        self.graph.update(self.subgraph)
+            # Replace subgraph in graph
+            self.graph.update(self.subgraph)
+            return True
+        return False
 
 
 """

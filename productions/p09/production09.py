@@ -45,6 +45,8 @@ class ProductionP9(Production):
 
             self._fill_graph(neighbors, midpoints)
             self.graph.update(self.subgraph)
+            return True
+        return False
 
 
 # paste this to main class to see how this production works
