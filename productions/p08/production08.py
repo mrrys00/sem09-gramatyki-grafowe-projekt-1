@@ -1,6 +1,6 @@
 from itertools import combinations
 
-from networkx.classes import all_neighbors
+from math import sqrt
 from ..production import Production
 
 
@@ -61,4 +61,35 @@ class ProductionP8(Production):
             return True
         return False
 
+    def apply_with_reference_node(self, reference_node):
+        """Apply P8 to the quadrilateral if possible."""
+        candidate_nodes = list(self.graph.nodes(data=True))
+        print(candidate_nodes)
+        candidate_nodes.sort(key=lambda x: sqrt((float(x[0].split(':')[1]) - reference_node['x'])**2 + (float(x[0].split(':')[2]) - reference_node['y'])**2))
+        print(candidate_nodes)
 
+        central_node = None
+        for node, data in candidate_nodes:
+            if data.get('label') == 'Q' and data.get('R') == 1:
+                central_node = node
+                break
+
+        if central_node:
+            neighbors = list(self.graph.neighbors(central_node))
+            if len(neighbors) != 4:
+                return False
+
+            for n1, n2 in combinations(neighbors, 2):
+                if self.graph.has_edge(n1, n2):
+                    neighbors_n1 = list(self.graph.neighbors(n1))
+                    neighbors_n2 = list(self.graph.neighbors(n2))
+
+                    subgraph_a = self._check_neighbors(neighbors_n1, neighbors_n2, n1, neighbors, central_node)
+                    subgraph_b = self._check_neighbors(neighbors_n2, neighbors_n1, n2, neighbors, central_node)
+
+                    result = next((sg for sg in (subgraph_a, subgraph_b) if sg is not None), None)
+                    if result:
+                        self.graph.nodes[result[0]]['R'] = 1
+                        return True
+
+        return False
