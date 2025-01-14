@@ -22,11 +22,8 @@ class ProductionP10(Production):
                     for n1, n2 in combinations(neighbors, 2):
                         if self.graph.has_edge(n1, n2):
                             neighbors_edges_cnt += 1
-                    print(neighbors_edges_cnt)
                     if neighbors_edges_cnt == 4:
-                        print("prod 10 can be applied to this graph")
                         return self._extract_subgraph(node, neighbors)
-        print("prod 10 can't be applied to this graph")
         return None
 
     def apply(self):
