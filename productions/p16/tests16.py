@@ -3,7 +3,7 @@ import networkx as nx
 
 from pytest import FixtureRequest
 
-from productions.p09.production09 import ProductionP9
+from productions.p16.production16 import ProductionP16
 from productions.utils import (
     prepare_valid_test_graph,
     prepare_corrupted_test_graph,

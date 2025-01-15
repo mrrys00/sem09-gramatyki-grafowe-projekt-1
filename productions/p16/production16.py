@@ -26,4 +26,6 @@ class ProductionP16(Production):
         result = self.check
         if result:
             r_node, neighbors = result
-            self.graph.nodes[r_node]['R'] = 1 
+            self.graph.nodes[r_node]['R'] = 1
+            return True
+        return False

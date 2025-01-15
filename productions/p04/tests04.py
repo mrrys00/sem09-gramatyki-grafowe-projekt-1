@@ -4,12 +4,13 @@ import networkx as nx
 from pytest import FixtureRequest
 
 from productions.p04.production04 import ProductionP4
-from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_valid_test_graph_with_hanging_node, prepare_valid_test_graph_with_hanging_node_p4
+from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_invalid_test_graph_with_hanging_node_p34_test, prepare_valid_test_graph_with_hanging_node_p4
 
 
 G = prepare_valid_test_graph()
 G_h = prepare_valid_test_graph_with_hanging_node_p4()
 G_n= prepare_corrupted_test_graph()
+G_h2 = prepare_invalid_test_graph_with_hanging_node_p34_test()
 
 @pytest.fixture(scope='function', params=[G])
 def prepare_graph_positive(request: type[FixtureRequest]):
@@ -21,6 +22,10 @@ def prepare_graph_positive_hanging(request: type[FixtureRequest]):
 
 @pytest.fixture(scope='function', params=[G_n])
 def prepare_graph_negative(request: type[FixtureRequest]):
+    yield request.param
+
+@pytest.fixture(scope='function', params=[G_h2])
+def prepare_graph_negative_hanging_corner(request: type[FixtureRequest]):
     yield request.param
 
 
@@ -42,6 +47,14 @@ def test_negative_p04_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""
     ProductionP4(prepare_graph_negative).apply()
     assert 'Q' not in prepare_graph_negative
+
+def test_negative_p04_apply_with_hanging_node_in_corner(prepare_graph_negative_hanging_corner: nx.Graph):
+    """should not apply production for hanging node in the corner"""
+    assert ProductionP4(prepare_graph_negative_hanging_corner).check is None
+    ProductionP4(prepare_graph_negative_hanging_corner).apply()
+    assert 'Q' not in prepare_graph_negative_hanging_corner
+    start_number_of_nodes = 29
+    assert len(prepare_graph_negative_hanging_corner.nodes) == start_number_of_nodes
 
 def test_positive_p04_nodes_number_after_production(prepare_graph_positive_hanging: nx.Graph):
     """apply creates new node in graph, verify nodes number"""
@@ -102,12 +115,12 @@ def test_inner_edges_after_production(prepare_graph_positive_hanging: nx.Graph):
 
 def test_negative_p04_check(prepare_graph_negative: nx.Graph):
     """check is None if the graph is not valid"""
-    assert ProductionP3(prepare_graph_negative).check is None
+    assert ProductionP4(prepare_graph_negative).check is None
 
 
 def test_negative_p04_apply(prepare_graph_negative: nx.Graph):
     """apply creates new node in graph due to the graph is invalid"""
-    ProductionP3(prepare_graph_negative).apply()
+    ProductionP4(prepare_graph_negative).apply()
     assert 'Q' not in prepare_graph_negative
 
 def test_negative_p04_check(prepare_graph_negative: nx.Graph):

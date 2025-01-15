@@ -75,7 +75,7 @@ class ProductionP17(Production):
             self.graph.update(self.subgraph)
             return True
         return False
-
+      
     def apply_with_reference_node(self, reference_node):
         """Apply P8 to the quadrilateral with a reference node."""
         candidate_nodes = self._find_candidate_nodes(reference_node)
@@ -89,3 +89,4 @@ class ProductionP17(Production):
                         self.graph.nodes[result[0]]['R'] = 1
                         return True
         return False
+

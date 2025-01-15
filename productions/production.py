@@ -16,9 +16,12 @@ class Production(ABC):
         pass
 
     @abstractmethod
-    def apply(self):
+    def apply(self) -> bool:
         """Apply the production to modify the graph."""
         pass
+
+    def apply_with_reference_node(self, reference_node) -> bool:
+        return self.apply()
 
     def _extract_subgraph(self, node, neighbors):
         """Extract subgraph from to apply production to"""

@@ -4,13 +4,14 @@ import networkx as nx
 from pytest import FixtureRequest
 
 from productions.p03.production03 import ProductionP3
-from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_valid_test_graph_with_hanging_node_p3, prepare_valid_test_graph_with_hanging_node_p3_test1, prepare_valid_test_graph_with_hanging_node_p3_test2
+from productions.utils import prepare_valid_test_graph, prepare_corrupted_test_graph, prepare_invalid_test_graph_with_hanging_node_p34_test, prepare_valid_test_graph_with_hanging_node_p3, prepare_valid_test_graph_with_hanging_node_p3_test1, prepare_valid_test_graph_with_hanging_node_p3_test2
 
 G = prepare_valid_test_graph()
 G_h = prepare_valid_test_graph_with_hanging_node_p3()
 G_n= prepare_corrupted_test_graph()
 G_t1 = prepare_valid_test_graph_with_hanging_node_p3_test1()
 G_t2 = prepare_valid_test_graph_with_hanging_node_p3_test2()
+G_h2 = prepare_invalid_test_graph_with_hanging_node_p34_test()
 
 @pytest.fixture(scope='function', params=[G])
 def prepare_graph_positive(request: type[FixtureRequest]):
@@ -30,6 +31,10 @@ def prepare_graph_with_two_G3(request: type[FixtureRequest]):
 
 @pytest.fixture(scope='function', params=[G_t2])
 def prepare_graph_with_two_G3_and_two_squares(request: type[FixtureRequest]):
+    yield request.param
+
+@pytest.fixture(scope='function', params=[G_h2])
+def prepare_graph_negative_hanging_corner(request: type[FixtureRequest]):
     yield request.param
 
 def test_positive_p03_check(prepare_graph_positive: nx.Graph):
@@ -150,3 +155,11 @@ def test_test2_graph(prepare_graph_with_two_G3_and_two_squares: nx.Graph):
 
     expected_v_nodes_number = 21
     assert len([s for s in prepare_graph_with_two_G3_and_two_squares.nodes() if 'v' in s]) == expected_v_nodes_number
+
+def test_negative_p04_apply_with_hanging_node_in_corner(prepare_graph_negative_hanging_corner: nx.Graph):
+    """should not apply production for hanging node in the corner"""
+    assert ProductionP3(prepare_graph_negative_hanging_corner).check is None
+    ProductionP3(prepare_graph_negative_hanging_corner).apply()
+    assert 'Q' not in prepare_graph_negative_hanging_corner
+    start_number_of_nodes = 29
+    assert len(prepare_graph_negative_hanging_corner.nodes) == start_number_of_nodes

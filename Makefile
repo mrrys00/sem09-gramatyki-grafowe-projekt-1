@@ -39,3 +39,6 @@ test_production_16:
 
 test_production_17:
 	pytest -vrPs productions/p17/tests17.py
+
+prepare_results_pdf:
+	convert results/*.png -quality 80 results/results.pdf

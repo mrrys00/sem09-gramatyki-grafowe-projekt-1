@@ -20,6 +20,7 @@ class ProductionP8(Production):
         )
 
     def _check_neighbors(self, primary_neighbors, secondary_neighbors, excluded_neighbors, neighbors, node):
+
         """Helper to check neighbor conditions and extract the subgraph."""
         for neighbor in primary_neighbors:
             neighbor_data = self.graph.nodes[neighbor]
@@ -88,4 +89,5 @@ class ProductionP8(Production):
                     if result:
                         self.graph.nodes[result[0]]['R'] = 1
                         return True
+
         return False
