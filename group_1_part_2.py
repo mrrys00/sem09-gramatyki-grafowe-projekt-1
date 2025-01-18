@@ -9,12 +9,16 @@ import os
 from productions.p01.production01 import ProductionP1
 from productions.p02.production02 import ProductionP2
 from productions.p03.production03 import ProductionP3
+from productions.p04.production04 import ProductionP4
 from productions.p07.production07 import ProductionP7
 from productions.p08.production08 import ProductionP8
 from productions.p09.production09 import ProductionP9
+from productions.p10.production10 import ProductionP10
+from productions.p11.production11 import ProductionP11
 from productions.p16.production16 import ProductionP16
+from productions.p17.production17 import ProductionP17
 
-from productions.utils import visualize_graph, convert_code_to_pdf
+from productions.utils import visualize_graph
 
 OUTPUT_DIR = "./results/"
 
@@ -105,28 +109,34 @@ def init_2_graph() -> nx.Graph:
     
     return G
 
-def run_prod_queue(G: nx.Graph, prod_queue: list, reference_node: dict, iterations: int) -> nx.Graph:
+def run_prod_queue(G: nx.Graph, pent_prod_queue: list, quad_prod_queue: list, reference_node: dict, iterations: int) -> nx.Graph:
     iter = 0
     m = lambda x: '0' * (3-len(str(x))) + str(x)
     visualize_graph(G, title=f"{m(iter)} Initial graph", img_path=OUTPUT_DIR)
     iter += 1
 
-    if ProductionP16(G).apply_with_reference_node(reference_node):
-        print("ProductionP16 applied")
-        visualize_graph(G, title=f"{m(iter)} ProductionP16 applied", img_path=OUTPUT_DIR)
-        iter += 1
-        if ProductionP9(G).apply_with_reference_node(reference_node):
-            print("ProductionP9 applied")
-            visualize_graph(G, title=f"{m(iter)} ProductionP9 applied", img_path=OUTPUT_DIR)
+    for _ in range(iterations):
+        if ProductionP16(G).apply_with_reference_node(reference_node):
+            print("ProductionP16 applied")
+            visualize_graph(G, title=f"{m(iter)} ProductionP16 applied", img_path=OUTPUT_DIR)
             iter += 1
 
-    for _ in range(iterations):
-        ProductionP7(G).apply_with_reference_node(reference_node)
-        print("ProductionP7 applied")
-        visualize_graph(G, title=f"{m(iter)} ProductionP7 applied", img_path=OUTPUT_DIR)
-        iter += 1
+        for p in pent_prod_queue:
+            applied = False
+            while p(G).apply_with_reference_node(reference_node):
+                applied = True
 
-        for p in prod_queue:
+            if applied:
+                print(f"{p.__name__} applied")
+                visualize_graph(G, title=f"{m(iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
+                iter += 1
+
+        if ProductionP7(G).apply_with_reference_node(reference_node):
+            print("ProductionP7 applied")
+            visualize_graph(G, title=f"{m(iter)} ProductionP7 applied", img_path=OUTPUT_DIR)
+            iter += 1
+
+        for p in quad_prod_queue:
             applied = False
             while p(G).apply_with_reference_node(reference_node):
                 applied = True
@@ -143,13 +153,20 @@ if __name__ == '__main__':
     prepare_output_directory()
 
     G = init_2_graph()
-    prod_queue = [
+    pent_prod_queue = [
+        ProductionP17,
+        ProductionP10,
+        ProductionP11,
+        ProductionP9,
+    ]
+    quad_prod_queue = [
         ProductionP8,
+        ProductionP4,
         ProductionP2,
         ProductionP3,
         ProductionP1
     ]
-    reference_node = {"x": 7.5, "y": 5.0}
+    reference_node = {"x": 7.75, "y": 5.0}
     iterations = 2
 
-    run_prod_queue(G, prod_queue, reference_node, iterations)
+    run_prod_queue(G, pent_prod_queue, quad_prod_queue, reference_node, iterations)
