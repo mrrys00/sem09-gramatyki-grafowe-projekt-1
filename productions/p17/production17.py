@@ -11,7 +11,17 @@ class ProductionP17(Production):
     Marks the pentagon for breaking if small quadrilateral is already marked
     """
 
-    def _check_neighbors(self, primary_neighbors, secondary_neighbors, excluded_neighbor, neighbors, node):
+    def _is_node_central(self, central_node, node_1, node_2):
+        """Check if the central node is equidistant from two other nodes."""
+        central_node_data = self.graph.nodes[central_node]
+        node_1_data = self.graph.nodes[node_1]
+        node_2_data = self.graph.nodes[node_2]
+        return (
+                node_1_data['x'] + node_2_data['x'] == 2 * central_node_data['x'] and
+                node_1_data['y'] + node_2_data['y'] == 2 * central_node_data['y']
+        )
+
+    def _check_neighbors(self, primary_neighbors, secondary_neighbors, excluded_neighbors, neighbors, node):
         """Helper to check neighbor conditions and extract the subgraph."""
         for neighbor in primary_neighbors:
             neighbor_data = self.graph.nodes[neighbor]
@@ -20,12 +30,13 @@ class ProductionP17(Production):
                 if len(neighbor_subgraph_nodes) != 5:
                     continue
                 for secondary in secondary_neighbors:
-                    if secondary != excluded_neighbor and secondary in self.graph.neighbors(neighbor):
-                        # Combine all relevant nodes and ensure uniqueness
+                    if secondary not in excluded_neighbors and secondary in self.graph.neighbors(neighbor) and \
+                            self._is_node_central(excluded_neighbors[1], excluded_neighbors[0], secondary):
                         all_nodes = neighbors + neighbor_subgraph_nodes + [node]
                         unique_nodes = list(dict.fromkeys(all_nodes))
                         return self._extract_subgraph(neighbor, unique_nodes)
         return None
+
 
     @property
     def check(self):
@@ -51,6 +62,7 @@ class ProductionP17(Production):
 
         return None
 
+
     def apply(self):
         """Apply P17 to the pentagon if possible."""
         result = self.check
@@ -74,7 +86,8 @@ class ProductionP17(Production):
         all_nodes = list(self.graph.nodes(data=True))
         candidate_nodes = [(node_id, node_data) for node_id, node_data in all_nodes if node_id in neighbors]
 
-        candidate_nodes.sort(key=lambda x: sqrt((float(x[0].split(':')[1]) - reference_node['x'])**2 + (float(x[0].split(':')[2]) - reference_node['y'])**2))
+        candidate_nodes.sort(key=lambda x: sqrt((float(x[0].split(':')[1]) - reference_node['x']) ** 2 + (
+                float(x[0].split(':')[2]) - reference_node['y']) ** 2))
 
         central_node = None
         for node, data in candidate_nodes:
@@ -92,8 +105,8 @@ class ProductionP17(Production):
                 if self.graph.has_edge(n1, n2):
                     neighbors_n1 = list(self.graph.neighbors(n1))
                     neighbors_n2 = list(self.graph.neighbors(n2))
-                    subgraph_a = self._check_neighbors(neighbors_n1, neighbors_n2, n1, neighbors, central_node)
-                    subgraph_b = self._check_neighbors(neighbors_n2, neighbors_n1, n2, neighbors, central_node)
+                    subgraph_a = self._check_neighbors(neighbors_n1, neighbors_n2, (n1, n2), neighbors, central_node)
+                    subgraph_b = self._check_neighbors(neighbors_n2, neighbors_n1, (n1, n2), neighbors, central_node)
 
                     result = next((sg for sg in (subgraph_a, subgraph_b) if sg is not None), None)
                     if result:

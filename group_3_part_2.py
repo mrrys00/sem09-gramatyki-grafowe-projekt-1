@@ -111,63 +111,98 @@ def init_2_graph() -> nx.Graph:
     return G
 
 
-def run_prod_queue(G: nx.Graph, init: list, triple_mark: list, triple_break: list, reference_node: dict,
-                   iterations: int) -> nx.Graph:
-    iter = 0
-    m = lambda x: '0' * (3 - len(str(x))) + str(x)
-    visualize_graph(G, title=f"{m(iter)} Initial graph", img_path=OUTPUT_DIR)
-    iter += 1
+class DUPA():
 
-    for p in init:
+    def __init__(self):
+        self.m = lambda x: '0' * (3 - len(str(x))) + str(x)
+
+    def apply_list(self, list_to_apply: list):
+        applied = False
+        for p in list_to_apply:
+            p_applied = self.apply_production(p)
+            applied = applied or p_applied
+            if p_applied:
+                self.apply_production(p)
+
+        return applied
+
+    def apply_production(self, p):
         applied = p(G).apply_with_reference_node(reference_node)
         if applied:
             print(f"{p.__name__} applied")
-            visualize_graph(G, title=f"{m(iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
-            iter += 1
+            visualize_graph(G, title=f"{self.m(self.iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
+            self.iter += 1
+        return applied
 
-    for _ in range(iterations):
+    def run_prod_queue(self, G: nx.Graph, first: list, quadrangles: list, pentagons: list, reference_node: dict,
+                       iterations: int) -> nx.Graph:
+        self.iter = 0
+        visualize_graph(G, title=f"{self.m(self.iter)} Initial graph", img_path=OUTPUT_DIR)
+        self.iter += 1
 
-        for p in triple_mark:
-            applied = p(G).apply_with_reference_node(reference_node)
-            if applied:
-                print(f"{p.__name__} applied")
-                visualize_graph(G, title=f"{m(iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
-                iter += 1
+        self.apply_production(ProductionP7)
 
-        for p in triple_break:
-            applied = p(G).apply_with_reference_node(reference_node)
-            if applied:
-                print(f"{p.__name__} applied")
-                visualize_graph(G, title=f"{m(iter)} {p.__name__} applied", img_path=OUTPUT_DIR)
-                iter += 1
+        for i in range(iterations):
+            gr2 = True
+            gr3 = True
+            while gr2 or gr3:
+                gr2 = self.apply_list(quadrangles)
+                while gr3:
+                    gr3 = self.apply_list(pentagons)
 
+            if i != iterations - 1:
+                self.apply_production(ProductionP7)
 
-    return G
+        return G
+
 
 if __name__ == '__main__':
     prepare_output_directory()
 
     G = init_2_graph()
 
-    init = [
-        ProductionP7,
-        ProductionP1,
+    # init = [
+    #     ProductionP7,
+    #     ProductionP1,
+    # ]
+    #
+    # triple_mark = [
+    #     ProductionP7,
+    #     ProductionP8,
+    #     ProductionP17,
+    #     ProductionP8
+    # ]
+    #
+    # triple_break = [
+    #     ProductionP10,
+    #     ProductionP2,
+    #     ProductionP3,
+    #     ProductionP1,
+    # ]
+
+    first = [
+        ProductionP7
     ]
 
-    triple_mark = [
-        ProductionP7,
-        ProductionP8,
-        ProductionP17,
+    second = [
+        ProductionP1,
+        ProductionP2,
+        ProductionP3,
+        ProductionP4,
         ProductionP8
     ]
 
-    triple_break = [
+    # init -> quad -> pent -> quad -> pent
+    # -> init-> quad-> pent -> quad -> pent ->quad
+    # -> init ->
+
+    third = [
+        ProductionP9,
         ProductionP10,
-        ProductionP2,
-        ProductionP3,
-        ProductionP1,
+        ProductionP11,
+        ProductionP17
     ]
     reference_node = {"x": 7.0, "y": 8.0}
-    iterations = 2
+    iterations = 3
 
-    run_prod_queue(G, init, triple_mark, triple_break, reference_node, iterations)
+    DUPA().run_prod_queue(G, first, second, third, reference_node, iterations)
