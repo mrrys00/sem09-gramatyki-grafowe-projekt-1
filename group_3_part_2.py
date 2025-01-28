@@ -111,7 +111,7 @@ def init_2_graph() -> nx.Graph:
     return G
 
 
-class DUPA():
+class Queue():
 
     def __init__(self):
         self.m = lambda x: '0' * (3 - len(str(x))) + str(x)
@@ -134,24 +134,21 @@ class DUPA():
             self.iter += 1
         return applied
 
-    def run_prod_queue(self, G: nx.Graph, first: list, quadrangles: list, pentagons: list, reference_node: dict,
+    def run_prod_queue(self, G: nx.Graph, quadrangles: list, pentagons: list, reference_node: dict,
                        iterations: int) -> nx.Graph:
         self.iter = 0
         visualize_graph(G, title=f"{self.m(self.iter)} Initial graph", img_path=OUTPUT_DIR)
         self.iter += 1
 
-        self.apply_production(ProductionP7)
 
         for i in range(iterations):
+            self.apply_production(ProductionP7)
             gr2 = True
             gr3 = True
             while gr2 or gr3:
                 gr2 = self.apply_list(quadrangles)
                 while gr3:
                     gr3 = self.apply_list(pentagons)
-
-            if i != iterations - 1:
-                self.apply_production(ProductionP7)
 
         return G
 
@@ -160,25 +157,6 @@ if __name__ == '__main__':
     prepare_output_directory()
 
     G = init_2_graph()
-
-    # init = [
-    #     ProductionP7,
-    #     ProductionP1,
-    # ]
-    #
-    # triple_mark = [
-    #     ProductionP7,
-    #     ProductionP8,
-    #     ProductionP17,
-    #     ProductionP8
-    # ]
-    #
-    # triple_break = [
-    #     ProductionP10,
-    #     ProductionP2,
-    #     ProductionP3,
-    #     ProductionP1,
-    # ]
 
     first = [
         ProductionP7
@@ -192,10 +170,6 @@ if __name__ == '__main__':
         ProductionP8
     ]
 
-    # init -> quad -> pent -> quad -> pent
-    # -> init-> quad-> pent -> quad -> pent ->quad
-    # -> init ->
-
     third = [
         ProductionP9,
         ProductionP10,
@@ -205,4 +179,4 @@ if __name__ == '__main__':
     reference_node = {"x": 7.0, "y": 8.0}
     iterations = 3
 
-    DUPA().run_prod_queue(G, first, second, third, reference_node, iterations)
+    Queue().run_prod_queue(G, second, third, reference_node, iterations)
